@@ -15,7 +15,7 @@ and pushing your changes back to GitHub, or by using the following link:
 Please update the following list of group members, including the NetIDs
 for each group member.
 
- * Student Name (NetID)
+ * Huan Qi (hq38)
  * Student Name (NetID)
  * Student Name (NetID)
 
