@@ -16,7 +16,7 @@ Please update the following list of group members, including the NetIDs
 for each group member.
 
  * Huan Qi (hq38)
- * Student Name (NetID)
+ * Raquel Taborga (rmt229)
  * Student Name (NetID)
 
 ### Member Roles
