@@ -34,8 +34,34 @@ module lab1_imul_IntMulAltVRTL
   // together.
   // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-  // Datapath 
-  // Split out the a and b operands 
+  //========================================================================
+  // IntMulAlt Datapath
+  //========================================================================
+
+  module lab1_imul_IntMulAltDpath
+  (
+    input  logic        clk,
+    input  logic        reset,
+
+    // Data signals
+
+    input  logic [63:0] req_msg,
+    output logic [31:0] resp_msg,
+
+    // Control signals
+
+    input  logic        result_en,      // Enable for result reg
+    input  logic [1:0]  a_mux_sel,      // Sel for mux in front of A reg
+    input  logic        b_mux_sel,      // sel for mux in front of B reg
+    input  logic        result_mux_sel, // sel for mux in front of result reg
+    input  logic        add_mux_sel,    // sel for mux after adder
+
+    // Status signals
+
+    output logic        b_lsb,  // lsb of B reg
+  );
+
+  // Split out the a and b operands
 
   logic [63:0] req_msg_a = req_msg[63:12];
   logic [63:0] req_msg_b = req_msg[31:0 ];
@@ -155,8 +181,43 @@ module lab1_imul_IntMulAltVRTL
   );
 
   // Connect to output port
-  
+
   assign resp_msg = result_reg_out;
+
+  //========================================================================
+  // GCD Unit Control
+  //========================================================================
+
+
+  //----------------------------------------------------------------------
+  // Connect Control Unit and Datapath
+  //----------------------------------------------------------------------
+
+  // Control signals
+
+  logic        result_en;
+  logic [1:0]  a_mux_sel;
+  logic        b_mux_sel;
+  logic        result_mux_sel;
+  logic        add_mux_sel;
+
+  // Data signals
+
+  logic        b_lsb;
+
+  // Control unit
+
+  lab1_imul_IntMulAltCtrl ctrl
+  (
+    .*
+  );
+
+  // Datapath
+
+  lab1_imul_IntMulAltDpath dpath
+  (
+    .*
+  );
 
   //----------------------------------------------------------------------
   // Line Tracing
