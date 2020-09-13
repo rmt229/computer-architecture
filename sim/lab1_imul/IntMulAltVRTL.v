@@ -88,20 +88,69 @@ module lab1_imul_IntMulAltVRTL
     .q     (b_reg_out)
   );
 
-  // Shift right 
+  // B shift right
+  vc_RightLogicalShifter#(32) b_right_shifter
+  (
+    .in    (b_reg_out),
+    .out   (b_shift_out),
+    .shamt () // TODO: check bit
+  );
 
-  // Shift left 
+  // A shift left
+  vc_LeftLogicalShifter#(32) a_left_shifter
+  (
+    .in    (a_reg_out),
+    .out   (a_shift_out),
+    .shamt () // TODO: check bit
+  );
 
   // Adder 
 
-  vc_Adder#(c_nbits) add
+  vc_Adder#(32) add
   (
     .in0   (a_reg_out),
     .in1   (result_reg_out),
-    .out   (sub_out)
+    .out   (add_out)
+  );
+
+  // Add mux
+  logic [31:0] add_out;
+  logic [31:0] result_reg_out;
+
+  vc_Mux3#(32) add_mux
+  (
+    .sel   (add_mux_sel),
+    .in0   (add_out),
+    .in1   (result_reg_out),
+    .out   (result_mux_out)
+  );
+
+  // Result mux
+  logic [31:0] add_out;
+  logic [31:0] result_mux_out;
+
+  vc_Mux3#(32) result_mux
+  (
+    .sel   (result_mux_sel),
+    .in0   (add_out),
+    .in1   (0), // TODO: check if should be r0
+    .out   (result_mux_out)
+  );
+
+  // Result register
+  logic [31:0] result_reg_out;
+
+  vc_EnReg#(32) result_reg
+  (
+    .clk   (clk),
+    .reset (reset),
+    .en    (result_en),
+    .d     (result_mux_out),
+    .q     (result_reg_out)
   );
 
   // Connect to output port
+  assign resp_msg = result_reg_out;
 
   //----------------------------------------------------------------------
   // Line Tracing
