@@ -34,6 +34,75 @@ module lab1_imul_IntMulAltVRTL
   // together.
   // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+  // Datapath 
+  // Split out the a and b operands 
+
+  logic [63:0] req_msg_a = req_msg[63:12];
+  logic [63:0] req_msg_b = req_msg[31:0 ];
+
+  // A Mux 
+  logic [31:0] a_shift_out;
+  logic [31:0] a_mux_out;
+
+  vc_Mux3#(32) a_mux
+  (
+    .sel   (a_mux_sel),
+    .in0   (a_shift_out),
+    .in1   (req_msg_a),
+    .out   (a_mux_out)
+  );
+
+// A register
+
+  logic [31:0] a_reg_out;
+
+  vc_EnReg#(32) a_reg
+  (
+    .clk   (clk),
+    .reset (reset),
+    .d     (a_mux_out),
+    .q     (a_reg_out)
+  );
+
+// B Mux 
+  logic [31:0] b_shift_out;
+  logic [31:0] b_mux_out;
+
+  vc_Mux3#(32) b_mux
+  (
+    .sel   (b_mux_sel),
+    .in0   (b_shift_out),
+    .in1   (req_msg_b),
+    .out   (b_mux_out)
+  );
+
+// B register
+
+  logic [31:0] b_reg_out;
+
+  vc_EnReg#(32) b_reg
+  (
+    .clk   (clk),
+    .reset (reset),
+    .d     (b_mux_out),
+    .q     (b_reg_out)
+  );
+
+  // Shift right 
+
+  // Shift left 
+
+  // Adder 
+
+  vc_Adder#(c_nbits) add
+  (
+    .in0   (a_reg_out),
+    .in1   (result_reg_out),
+    .out   (sub_out)
+  );
+
+  // Connect to output port
+
   //----------------------------------------------------------------------
   // Line Tracing
   //----------------------------------------------------------------------
