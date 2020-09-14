@@ -36,32 +36,32 @@ module lab1_imul_IntMulBaseVRTL
   // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
-  //========================================================================
-  // IntMulBase Datapath
-  //========================================================================
+//========================================================================
+// IntMulBase Datapath
+//========================================================================
 
-  module lab1_imul_IntMulBaseDpath
-  (
-    input  logic        clk,
-    input  logic        reset,
+module lab1_imul_IntMulBaseDpath
+(
+  input  logic        clk,
+  input  logic        reset,
 
-    // Data signals
+  // Data signals
 
-    input  logic [63:0] req_msg,
-    output logic [31:0] resp_msg,
+  input  logic [63:0] req_msg,
+  output logic [31:0] resp_msg,
 
-    // Control signals
+  // Control signals
 
-    input  logic        result_en,      // Enable for result reg
-    input  logic [1:0]  a_mux_sel,      // Sel for mux in front of A reg
-    input  logic        b_mux_sel,      // sel for mux in front of B reg
-    input  logic        result_mux_sel, // sel for mux in front of result reg
-    input  logic        add_mux_sel,    // sel for mux after adder
+  input  logic [1:0]  a_mux_sel,      // Sel for mux in front of A reg
+  input  logic        b_mux_sel,      // sel for mux in front of B reg
+  input  logic        result_mux_sel, // sel for mux in front of result reg
+  input  logic        result_en,      // Enable for result reg
+  input  logic        add_mux_sel,    // sel for mux after adder
 
-    // Status signals
+  // Status signals
 
-    output logic        b_lsb,  // lsb of B reg
-  );
+  output logic        b_lsb,  // lsb of B reg
+);
 
   // Split out the a and b operands
 
@@ -186,10 +186,177 @@ module lab1_imul_IntMulBaseVRTL
   
   assign resp_msg = result_reg_out;
 
-  //========================================================================
-  // GCD Unit Control
-  //========================================================================
+endmodule
 
+//========================================================================
+// GCD Unit Control
+//========================================================================
+
+module lab1_imul_IntMulBaseCtrl
+(
+  input  logic  clk,
+  input  logic  reset,
+
+  // Dataflow Signals
+
+  input  logic  req_val,
+  output logic  req_rdy,
+  output logic  resp_val,
+  input  logic  resp_rdy,
+
+  // Register Enables
+
+  output logic  a_reg_en,
+  output logic  b_reg_en,
+  output logic  result_en,
+
+  // Mux Selects
+
+  output logic  a_mux_sel,
+  output logic  b_mux_sel,
+  output logic  add_mux_sel,
+  output logic  result_mux_sel,
+
+  // Data Signals
+  input  logic  b_lsb
+);
+
+  //----------------------------------------------------------------------
+  // State Enum Definitions
+  //----------------------------------------------------------------------
+
+  typedef enum logic [$clog2(4)-1:0]
+  {
+    STATE_IDLE = 2'b00,
+    STATE_CALC = 2'b01,
+    STATE_DONE = 2'b10
+  } state_t;
+
+  //----------------------------------------------------------------------
+  // State
+  //----------------------------------------------------------------------
+
+  state_t      state;
+  state_t next_state;
+
+  logic cclk; // Gated clock
+  logic done; // Done goes high when the counter reaches a value of 32
+  logic incr; // Wire used to trigger incrementation in the fsm in CALC
+  logic  clr; // Clear counter, triggered by DONE state
+
+  // Combinatinoal logic block for the Counter Unit
+  always_comb begin
+    cclk = clk && (state != STATE_IDLE);
+    incr = (state == STATE_CALC);
+    clr  = (state == STATE_DONE);
+  end
+
+  vc_Basic#(32) cycle_counter
+  (
+   .clk           (cclk),
+   .reset         (reset),
+   .clear         (clear),
+   .increment     (incr),
+   .decrement     (1'b0),
+   .count_is_max  (done)
+  );
+
+  assign counter_lt_32 =        !done; // Multiply Cycle Counter
+  assign add           =        b_lsb; // LSB of the B value
+
+  //----------------------------------------------------------------------
+  // 32 Bit Counter logic
+  //----------------------------------------------------------------------
+  // TODO
+
+  //----------------------------------------------------------------------
+  // State Transitions
+  //----------------------------------------------------------------------
+
+  always_comb begin
+    case(state)
+      STATE_IDLE: if (req_val && req_rdy)   state = STATE_CALC;
+      STATE_CALC: if (!counter_lt_32)       state = STATE_DONE;
+      STATE_DONE: if (resp_val && resp_rdy) state = STATE_IDLE;
+      default:    state_next = 'x;
+
+    endcase
+
+  end
+
+  //----------------------------------------------------------------------
+  // State Outputs
+  //----------------------------------------------------------------------
+  // Task allows all of the outputs to be "bundled together"
+
+  localparam a_x     = 1'dx;
+  localparam a_ld    = 1'd0;
+  localparam a_shift = 1'd1;
+
+  localparam b_x     = 1'dx;
+  localparam b_ld    = 1'd0;
+  localparam b_shift = 1'd1;
+
+  task cs
+  (
+    input logic cs_req_rdy,
+    input logic cs_resp_val,
+    input logic cs_a_reg_en,
+    input logic cs_b_reg_en,
+    input logic cs_result_en,
+    input logic cs_a_mux_sel,
+    input logic cs_b_mux_sel,
+    input logic cs_add_mux_sel,
+    input logic cs_result_mux_sel
+  );
+  begin
+    req_rdy = cs_req_rdy;
+    resp_val = cs_resp_val;
+    a_reg_en = cs_a_reg_en;
+    b_reg_en = cs_b_reg_en;
+    result_en = cs_result_en;
+    a_mux_sel = cs_a_mux_sel;
+    b_mux_sel = cs_b_mux_sel;
+    add_mux_sel = cs_add_mux_sel;
+    result_mux_sel = cs_result_mux_sel;
+  end
+  endtask
+
+  // Labels for Mealy transistions
+
+  logic do_add_shift;
+  logic do_shift;
+
+  assign do_add_shift = counter_lt_32 && b_lsb; // TODO: should we seperate the logic for add and shift?
+  assign do_shift     = counter_lt_32 && !b_lsb;
+
+  // Set outputs using a control signal "table"
+
+  always_comb begin
+
+    cs(  0,  0,  0,  0,  0,  0,  0,  0,  0); // TODO: to fill cses
+    case ( state )
+      //                                    req resp a_reg b_reg result a_mux b_mux add_mux result_mux
+      //                                    rdy val  en    en    en     sel   sel    sel    sel
+      STATE_IDLE:                      cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
+      STATE_CALC: if ( do_add_shift )  cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
+             else if ( do_shift )      cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
+      STATE_DONE:                      cs(  0,  1,  0,  0,  0,  0,  0,  0,  0);
+      default                          cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
+
+    endcase
+
+  end
+
+  //----------------------------------------------------------------------
+  // FSM Sync. State progression
+  //----------------------------------------------------------------------
+  always_ff @(posedge clk) begin
+    if (reset) state <= STATE_IDLE;
+    else       state <= next_state;
+  end
+
+endmodule
 
   //----------------------------------------------------------------------
   // Connect Control Unit and Datapath
@@ -251,136 +418,6 @@ module lab1_imul_IntMulBaseVRTL
 
   `endif /* SYNTHESIS */
 
-endmodule
-
-
-/* State enum  definition */
-typedef enum logic [$clog2(4)-1:0] 
-{ 
-  STATE_IDLE = 2'b00, 
-  STATE_CALC = 2'b01, 
-  STATE_DONE = 2'b10
-} state_t;
-
-module lab1_imul_IntMulCtrl
-(
-  input  logic  clk,
-  input  logic  reset,
-              
-  // Dataflow Signals
-  input  logic  req_val,
-  output logic  req_rdy,
-  output logic  resp_val,
-  input  logic  resp_rdy,
-  
-  // Register Enables
-  output logic  a_reg_en,
-  output logic  b_reg_en,
-  output logic  result_en,
-
-  // Mux Selects
-  output logic  a_mux_sel,
-  output logic  b_mux_sel,
-  output logic  add_mux_sel,
-  output logic  result_mux_sel,
-  
-  // Data Signals
-  input  logic  b_lsb
-);
-
-  state_t      state;
-  state_t next_state;
-
-  logic cclk; // Gated clock
-  logic done; // Done goes high when the counter reaches a value of 32
-  logic incr; // Wire used to trigger incrementation in the fsm in CACL
-  logic  clr; // Clear counter, triggered by DONE state
-
-  // Combinatinoal logic block for the Counter Unit
-  always_comb begin
-    cclk = clk && (state != STATE_IDLE);
-    incr = (state == STATE_CALC);
-    clr = (state == STATE_DONE);
-  end
- 
-  vc_Basic#(32) cycle_counter
-  (
-   .clk           (cclk),
-   .reset         (reset),
-   .clear         (clear),
-   .increment     (incr),
-   .decrement     (1'b0),
-   .count_is_max  (done)
-  );
-
-  assign shift =        !done; // Multiply Cycle Counter
-  assign   add =        b_lsb; // LSB of the B value
-
-  //----------------------------------------------------------------------
-  // 32 Bit Counter logic
-  //----------------------------------------------------------------------
-  // TODO
-  
-  //----------------------------------------------------------------------
-  // Next State logic 
-  //----------------------------------------------------------------------
-  always_comb begin
-    case(state)
-      STATE_IDLE: if (req_val && req_rdy)   state = STATE_CALC;
-      STATE_CALC: if (!shift)               state = STATE_DONE;
-      STATE_DONE; if (resp_val && resp_rdy) state = STATE_IDLE;
-      default: state_next = 'x;                                        
-    endcase
-  end
-  
-  //----------------------------------------------------------------------
-  // State Outputs
-  //----------------------------------------------------------------------
-  // Task allows all of the outputs to be "bundled together"
-  task cs 
-  (
-   input logic cs_req_rdy,
-   input logic cs_resp_val,
-   input logic cs_a_reg_en,
-   input logic cs_b_reg_en,
-   input logic cs_result_en,
-   input logic cs_a_mux_sel,
-   input logic cs_b_mux_sel,
-   input logic cs_add_mux_sel,
-   input logic cs_result_mux_sel
-  );
-    begin
-      req_rdy = cs_req_rdy;
-      resp_val = cs_resp_val;
-      a_reg_en = cs_a_reg_en;
-      b_reg_en = cs_b_reg_en;
-      result_en = cs_result_en;
-      a_mux_sel = cs_a_mux_sel;
-      b_mux_sel = cs_b_mux_sel;
-      add_mux_sel = cs_add_mux_sel;
-      result_mux_sel = cs_result_mux_sel;
-    end
-  endtask
-  
-  always_comb begin
-    case ( state )
-      //       req resp a_reg b_reg result a_mux b_mux add_mux result_mux
-      //        rdy val  en    en    en     sel   sel    sel    sel
-      STATE_IDLE: cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-      STATE_CALC: cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-      STATE_DONE: cs(  0,  1,  0,  0,  0,  0,  0,  0,  0);
-      default:    cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-    endcase
-  end
-
-  //----------------------------------------------------------------------
-  // FSM Sync. State progression
-  //----------------------------------------------------------------------
-  always_ff @(posedge clk) begin
-    if (reset) state <= STATE_IDLE;
-    else       state <= next_state;
-  end
-  
 endmodule
 
 `endif /* LAB1_IMUL_INT_MUL_BASE_V */
