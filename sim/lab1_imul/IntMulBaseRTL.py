@@ -58,7 +58,7 @@ if hasattr( sys, '_called_from_test' ):
   if pytest.config.getoption('prtl'):
     rtl_language = 'pymtl'
   elif pytest.config.getoption('vrtl'):
-    rtl_language = 'verilog'
+    rtl_language = 'pymtl'
 
 # Import the appropriate version based on the rtl_language variable
 
