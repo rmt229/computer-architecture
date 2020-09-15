@@ -182,20 +182,6 @@ module lab1_imul_IntMulBaseDpath
     .q     (result_reg_out)
   );
 
-  // Counter 
-  
-  vc_BasicCounter(5, 0, 32) counter
-  (
-    .clk            (clk),
-    .reset          (reset),
-    .clear          (0), // TODO: never turned on
-    .increment      (1), // TODO: always increment; triggered by clk
-    .decrement      (),  // TODO: never turned on
-    .count          (count), 
-    .count_is_zero  (),  // TODO: never turned on
-    .count_is_max   (count_is_max)
-  );
-
   // Connect to output port
   
   assign resp_msg = result_reg_out;
@@ -233,6 +219,7 @@ module lab1_imul_IntMulBaseCtrl
 
   // Data Signals
   input  logic  b_lsb
+  input  logic  count_is_max
 );
 
   //----------------------------------------------------------------------
@@ -253,10 +240,10 @@ module lab1_imul_IntMulBaseCtrl
   state_t      state;
   state_t next_state;
 
-  logic cclk; // Gated clock
-  logic done; // Done goes high when the counter reaches a value of 32
-  logic incr; // Wire used to trigger incrementation in the fsm in CALC
-  logic  clr; // Clear counter, triggered by DONE state
+  logic         cclk; // Gated clock
+  logic count_is_max; // Done goes high when the counter reaches a value of 32
+  logic         incr; // Wire used to trigger incrementation in the fsm in CALC
+  logic          clr; // Clear counter, triggered by DONE state
 
   // Combinatinoal logic block for the Counter Unit
   always_comb begin
@@ -265,17 +252,19 @@ module lab1_imul_IntMulBaseCtrl
     clr  = (state == STATE_DONE);
   end
 
-  vc_Basic#(32) cycle_counter
+  vc_Basic#(32) cycle_counter // TODO: should we instead have vc_BasicCounter(5, 0, 32) and move it to datapath?
   (
    .clk           (cclk),
    .reset         (reset),
-   .clear         (clear),
+   .clear         (clr),
    .increment     (incr),
    .decrement     (1'b0),
-   .count_is_max  (done)
+   .count_is_max  (count_is_max)
+  //  .count          (count), 
+  //  .count_is_zero  (),  // TODO: never used should we just skip them? 
   );
 
-  assign counter_lt_32 =        !done; // Multiply Cycle Counter
+  assign counter_not_max =        !count_is_max; // Multiply Cycle Counter
   assign add           =        b_lsb; // LSB of the B value
 
   //----------------------------------------------------------------------
@@ -294,7 +283,7 @@ module lab1_imul_IntMulBaseCtrl
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( !counter_lt_32 )       next_state = STATE_DONE;
+      STATE_CALC: if ( !counter_not_max )       next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
@@ -345,8 +334,8 @@ module lab1_imul_IntMulBaseCtrl
   logic do_add_shift;
   logic do_shift;
 
-  assign do_add_shift = counter_lt_32 && b_lsb; // TODO: should we seperate the logic for add and shift?
-  assign do_shift     = counter_lt_32 && !b_lsb;
+  assign do_add_shift = counter_not_max && b_lsb; // TODO: should we seperate the logic for add and shift?
+  assign do_shift     = counter_not_max && !b_lsb;
 
   // Set outputs using a control signal "table"
 
