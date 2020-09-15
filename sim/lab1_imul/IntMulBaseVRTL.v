@@ -60,15 +60,16 @@ module lab1_imul_IntMulBaseDpath
 
   // Status signals
 
-  output logic        b_lsb,  // lsb of B reg
+  output logic        b_lsb,          // lsb of B reg
+  output logic        count_is_max    // counter is 32
 );
 
   // Split out the a and b operands
 
-  logic [63:0] req_msg_a = req_msg[63:12];
-  logic [63:0] req_msg_b = req_msg[31:0 ];
+  logic [31:0] req_msg_a = req_msg[63:32];
+  logic [31:0] req_msg_b = req_msg[31:0 ];
 
-  // A Mux 
+  // A Mux
   logic [31:0] a_shift_out;
   logic [31:0] a_mux_out;
 
@@ -93,6 +94,7 @@ module lab1_imul_IntMulBaseDpath
   );
 
   // B Mux
+
   logic [31:0] b_shift_out;
   logic [31:0] b_mux_out;
 
@@ -118,7 +120,7 @@ module lab1_imul_IntMulBaseDpath
 
   // B shift right logical
 
-  vc_RightLogicalShifter#(32) b_right_shifter
+  vc_RightLogicalShifter#(32,1) b_right_shifter
   (
     .in    (b_reg_out),
     .out   (b_shift_out),
@@ -127,7 +129,7 @@ module lab1_imul_IntMulBaseDpath
 
   // A shift left logical
 
-  vc_LeftLogicalShifter#(32) a_left_shifter
+  vc_LeftLogicalShifter#(32,1) a_left_shifter
   (
     .in    (a_reg_out),
     .out   (a_shift_out),
@@ -383,6 +385,7 @@ endmodule
   // Data signals
 
   logic        b_lsb;
+  logic        count_is_max;
 
   // Control unit
 
