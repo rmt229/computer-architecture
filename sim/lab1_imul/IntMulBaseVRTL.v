@@ -283,7 +283,7 @@ module lab1_imul_IntMulBaseCtrl
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( !counter_not_max )       next_state = STATE_DONE;
+      STATE_CALC: if ( !counter_not_max )     next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
@@ -296,13 +296,16 @@ module lab1_imul_IntMulBaseCtrl
   //----------------------------------------------------------------------
   // Task allows all of the outputs to be "bundled together"
 
-  localparam a_x     = 1'dx;
-  localparam a_ld    = 1'd0;
-  localparam a_shift = 1'd1;
+  localparam a_x      = 1'dx;
+  localparam a_ld     = 1'd0;
+  localparam a_shift  = 1'd1;
 
-  localparam b_x     = 1'dx;
-  localparam b_ld    = 1'd0;
-  localparam b_shift = 1'd1;
+  localparam b_x      = 1'dx;
+  localparam b_ld     = 1'd0;
+  localparam b_shift  = 1'd1;
+
+  localparam add_x    = 1'dx;
+  localparam result_x = 1'dx;
 
   task cs
   (
@@ -341,15 +344,15 @@ module lab1_imul_IntMulBaseCtrl
 
   always_comb begin
 
-    cs(  0,  0,  0,  0,  0,  0,  0,  0,  0); // TODO: to fill cses
-    case ( state )
-      //                                    req resp a_reg b_reg result a_mux b_mux add_mux result_mux
-      //                                    rdy val  en    en    en     sel   sel    sel    sel
-      STATE_IDLE:                      cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-      STATE_CALC: if ( do_add_shift )  cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-             else if ( do_shift )      cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
-      STATE_DONE:                      cs(  0,  1,  0,  0,  0,  0,  0,  0,  0);
-      default                          cs(  0,  0,  0,  0,  0,  0,  0,  0,  0);
+    cs(  0,  0,  a_x,  0,  b_x,  0,  0,  0,  0); // TODO: to fill cs
+    case ( state ) // TODO: do we have a_reg_en & b_reg_en?
+      //                                     req resp a_mux    a_reg b_mux    b_reg result add_mux         result_mux
+      //                                     rdy val  sel      en    sel      en    en     sel             sel
+      STATE_IDLE:                       cs(  1,  0,   a_ld,    1,    b_ld,    1,    1,     0,              0);
+      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, 1,    b_shift, 1,    1,     add_out,        add_mux_out );
+             else if ( do_shift )       cs(  0,  0,   a_shift, 1,    b_shift, 1,    1,     result_reg_out, add_mux_out );
+      STATE_DONE:                       cs(  0,  1,   a_x,     0,    b_x,     0,    0,     0,              0);
+      default                           cs( 'x, 'x,   a_x,     'x,   b_x,     'x,  'x,     add_x,          result_x);
 
     endcase
 
