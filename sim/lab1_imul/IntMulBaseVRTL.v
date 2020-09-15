@@ -72,7 +72,7 @@ module lab1_imul_IntMulBaseDpath
   logic [31:0] a_shift_out;
   logic [31:0] a_mux_out;
 
-  vc_Mux3#(32) a_mux
+  vc_Mux2#(32) a_mux
   (
     .sel   (a_mux_sel),
     .in0   (a_shift_out),
@@ -96,7 +96,7 @@ module lab1_imul_IntMulBaseDpath
   logic [31:0] b_shift_out;
   logic [31:0] b_mux_out;
 
-  vc_Mux3#(32) b_mux
+  vc_Mux2#(32) b_mux
   (
     .sel   (b_mux_sel),
     .in0   (b_shift_out),
@@ -148,7 +148,7 @@ module lab1_imul_IntMulBaseDpath
   logic [31:0] add_out;
   logic [31:0] result_reg_out;
 
-  vc_Mux3#(32) add_mux
+  vc_Mux2#(32) add_mux
   (
     .sel   (add_mux_sel),
     .in0   (add_out),
@@ -161,7 +161,7 @@ module lab1_imul_IntMulBaseDpath
   logic [31:0] add_out;
   logic [31:0] result_mux_out;
 
-  vc_Mux3#(32) result_mux
+  vc_Mux2#(32) result_mux
   (
     .sel   (result_mux_sel),
     .in0   (add_mux_out),
@@ -180,6 +180,20 @@ module lab1_imul_IntMulBaseDpath
     .en    (result_en),
     .d     (result_mux_out),
     .q     (result_reg_out)
+  );
+
+  // Counter 
+  
+  vc_BasicCounter(5, 0, 32) counter
+  (
+    .clk            (clk),
+    .reset          (reset),
+    .clear          (0), // TODO: never turned on
+    .increment      (1), // TODO: always increment; triggered by clk
+    .decrement      (),  // TODO: never turned on
+    .count          (count), 
+    .count_is_zero  (),  // TODO: never turned on
+    .count_is_max   (count_is_max)
   );
 
   // Connect to output port
@@ -274,11 +288,15 @@ module lab1_imul_IntMulBaseCtrl
   //----------------------------------------------------------------------
 
   always_comb begin
-    case(state)
-      STATE_IDLE: if (req_val && req_rdy)   state = STATE_CALC;
-      STATE_CALC: if (!counter_lt_32)       state = STATE_DONE;
-      STATE_DONE: if (resp_val && resp_rdy) state = STATE_IDLE;
-      default:    state_next = 'x;
+
+    next_state = state; 
+
+    case( state )
+
+      STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
+      STATE_CALC: if ( !counter_lt_32 )       next_state = STATE_DONE;
+      STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
+      default:    next_state = 'x;
 
     endcase
 
