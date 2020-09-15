@@ -418,6 +418,37 @@ endmodule
     // internal state including the current FSM state.
     // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+    $sformat( str, "%x", dpath.a_reg_out );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.b_reg_out );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    case ( ctrl.state )
+
+      ctrl.STATE_IDLE:
+        vc_trace.append_str( trace_str, "I " );
+
+      ctrl.STATE_CALC:
+      begin
+        if ( ctrl.do_add_shift )
+          vc_trace.append_str( trace_str, "Caddshift" );
+        else if ( ctrl.do_shift )
+          vc_trace.append_str( trace_str, "Cshift" );
+        else
+          vc_trace.append_str( trace_str, "C " );
+      end
+
+      ctrl.STATE_DONE:
+        vc_trace.append_str( trace_str, "D " );
+
+      default:
+        vc_trace.append_str( trace_str, "? " );
+
+    endcase
+
     vc_trace.append_str( trace_str, ")" );
 
     $sformat( str, "%x", resp_msg );
