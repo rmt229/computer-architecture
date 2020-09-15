@@ -252,7 +252,7 @@ module lab1_imul_IntMulBaseCtrl
     clr  = (state == STATE_DONE);
   end
 
-  vc_Basic#(32) cycle_counter // TODO: should we instead have vc_BasicCounter(5, 0, 32) and move it to datapath?
+vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_BasicCounter#(5, 0, 32) and move it to datapath?
   (
    .clk           (cclk),
    .reset         (reset),
@@ -265,7 +265,7 @@ module lab1_imul_IntMulBaseCtrl
   );
 
   assign counter_not_max =        !count_is_max; // Multiply Cycle Counter
-  assign add           =        b_lsb; // LSB of the B value
+  assign add             =        b_lsb;         // LSB of the B value
 
   //----------------------------------------------------------------------
   // 32 Bit Counter logic
