@@ -260,7 +260,7 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
    .reset         (reset),
    .clear         (clr),
    .increment     (incr),
-   .decrement     (1'b0),
+   .decrement     (0),
    .count_is_max  (count_is_max)
   //  .count          (count), 
   //  .count_is_zero  (),  // TODO: never used should we just skip them? 
@@ -334,7 +334,7 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
   end
   endtask
 
-  // Labels for Mealy transistions
+  // Labels for Mealy transitions
 
   logic do_add_shift;
   logic do_shift;
