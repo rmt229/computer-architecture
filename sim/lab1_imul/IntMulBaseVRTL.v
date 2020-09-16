@@ -7,34 +7,13 @@
 
 `include "vc/trace.v"
 `include "vc/counters.v"
+`include "vc/muxes.v"
+`include "vc/regs.v"
+`include "vc/arithmetic.v"
 
 // ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 // Define datapath and control unit here.
 // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-//========================================================================
-// Integer Multiplier Fixed-Latency Implementation
-//========================================================================
-
-module lab1_imul_IntMulBaseVRTL
-(
-  input  logic        clk,
-  input  logic        reset,
-
-  input  logic        req_val,
-  output logic        req_rdy,
-  input  logic [63:0] req_msg,
-
-  output logic        resp_val,
-  input  logic        resp_rdy,
-  output logic [31:0] resp_msg
-);
-  
-  // ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  // Instantiate datapath and control models here and then connect them
-  // together.
-  // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
 
 //========================================================================
 // IntMulBase Datapath
@@ -85,10 +64,9 @@ module lab1_imul_IntMulBaseDpath
 
   logic [31:0] a_reg_out;
 
-  vc_EnReg#(32) a_reg
+  vc_Reg#(32) a_reg
   (
     .clk   (clk),
-    .reset (reset),
     .d     (a_mux_out),
     .q     (a_reg_out)
   );
@@ -110,10 +88,9 @@ module lab1_imul_IntMulBaseDpath
 
   logic [31:0] b_reg_out;
 
-  vc_EnReg#(32) b_reg
+  vc_Reg#(32) b_reg
   (
     .clk   (clk),
-    .reset (reset),
     .d     (b_mux_out),
     .q     (b_reg_out)
   );
@@ -124,7 +101,7 @@ module lab1_imul_IntMulBaseDpath
   (
     .in    (b_reg_out),
     .out   (b_shift_out),
-    .shamt (1) // TODO: check bit
+    .shamt (1)
   );
 
   // A shift left logical
@@ -133,10 +110,10 @@ module lab1_imul_IntMulBaseDpath
   (
     .in    (a_reg_out),
     .out   (a_shift_out),
-    .shamt (1) // TODO: check bit
+    .shamt (1)
   );
 
-  // Adder 
+  // Adder
 
   vc_Adder#(32) add
   (
@@ -160,20 +137,17 @@ module lab1_imul_IntMulBaseDpath
 
   // Result mux
 
-  logic [31:0] add_out;
   logic [31:0] result_mux_out;
 
   vc_Mux2#(32) result_mux
   (
     .sel   (result_mux_sel),
     .in0   (add_mux_out),
-    .in1   (0), // TODO: check if should be r0
+    .in1   (0),
     .out   (result_mux_out)
   );
 
   // Result register
-
-  logic [31:0] result_reg_out;
 
   vc_EnReg#(32) result_reg
   (
@@ -185,7 +159,7 @@ module lab1_imul_IntMulBaseDpath
   );
 
   // Connect to output port
-  
+
   assign resp_msg = result_reg_out;
 
 endmodule
@@ -208,8 +182,6 @@ module lab1_imul_IntMulBaseCtrl
 
   // Register Enables
 
-  output logic  a_reg_en,
-  output logic  b_reg_en,
   output logic  result_en,
 
   // Mux Selects
@@ -220,7 +192,7 @@ module lab1_imul_IntMulBaseCtrl
   output logic  result_mux_sel,
 
   // Data Signals
-  input  logic  b_lsb
+  input  logic  b_lsb,
   input  logic  count_is_max
 );
 
@@ -242,37 +214,36 @@ module lab1_imul_IntMulBaseCtrl
   state_t      state;
   state_t next_state;
 
-  logic         cclk; // Gated clock
-  logic count_is_max; // Done goes high when the counter reaches a value of 32
-  logic         incr; // Wire used to trigger incrementation in the fsm in CALC
-  logic          clr; // Clear counter, triggered by DONE state
+  logic           cclk; // Gated clock
+  logic      count_max; // Done goes high when the counter reaches a value of 32
+  logic           incr; // Wire used to trigger incrementation in the fsm in CALC
+  logic            clr; // Clear counter, triggered by DONE state
+  logic          count; // Count
+  logic  count_is_zero; // Count is zero
 
   // Combinatinoal logic block for the Counter Unit
   always_comb begin
+
     cclk = clk && (state != STATE_IDLE);
     incr = (state == STATE_CALC);
     clr  = (state == STATE_DONE);
+
   end
 
-vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_BasicCounter#(5, 0, 32) and move it to datapath?
+vc_BasicCounter#(5, 0, 32) cycle_counter
   (
    .clk           (cclk),
    .reset         (reset),
    .clear         (clr),
    .increment     (incr),
    .decrement     (0),
-   .count_is_max  (count_is_max)
-  //  .count          (count), 
-  //  .count_is_zero  (),  // TODO: never used should we just skip them? 
+   .count_is_max  (count_max),
+   .count         (count),
+   .count_is_zero (count_is_zero)  // TODO: never used should we just skip them?
   );
 
   assign counter_not_max =        !count_is_max; // Multiply Cycle Counter
   assign add             =        b_lsb;         // LSB of the B value
-
-  //----------------------------------------------------------------------
-  // 32 Bit Counter logic
-  //----------------------------------------------------------------------
-  // TODO
 
   //----------------------------------------------------------------------
   // State Transitions
@@ -280,7 +251,7 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
 
   always_comb begin
 
-    next_state = state; 
+    next_state = state;
 
     case( state )
 
@@ -298,23 +269,26 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
   //----------------------------------------------------------------------
   // Task allows all of the outputs to be "bundled together"
 
-  localparam a_x      = 1'dx;
-  localparam a_ld     = 1'd0;
-  localparam a_shift  = 1'd1;
+  localparam a_x        = 1'dx;
+  localparam a_ld       = 1'd0;
+  localparam a_shift    = 1'd1;
 
-  localparam b_x      = 1'dx;
-  localparam b_ld     = 1'd0;
-  localparam b_shift  = 1'd1;
+  localparam b_x        = 1'dx;
+  localparam b_ld       = 1'd0;
+  localparam b_shift    = 1'd1;
 
-  localparam add_x    = 1'dx;
-  localparam result_x = 1'dx;
+  localparam add_x      = 1'dx;
+  localparam add_res    = 1'd0;
+  localparam add_add    = 1'd1;
+
+  localparam result_x   = 1'dx;
+  localparam result_add = 1'd0;
+  localparam result_0   = 1'd1;
 
   task cs
   (
     input logic cs_req_rdy,
     input logic cs_resp_val,
-    input logic cs_a_reg_en,
-    input logic cs_b_reg_en,
     input logic cs_result_en,
     input logic cs_a_mux_sel,
     input logic cs_b_mux_sel,
@@ -324,8 +298,6 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
   begin
     req_rdy = cs_req_rdy;
     resp_val = cs_resp_val;
-    a_reg_en = cs_a_reg_en;
-    b_reg_en = cs_b_reg_en;
     result_en = cs_result_en;
     a_mux_sel = cs_a_mux_sel;
     b_mux_sel = cs_b_mux_sel;
@@ -346,15 +318,15 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
 
   always_comb begin
 
-    cs(  0,  0,  a_x,  0,  b_x,  0,  0,  0,  0); // TODO: to fill cs
-    case ( state ) // TODO: do we have a_reg_en & b_reg_en?
-      //                                     req resp a_mux    a_reg b_mux    b_reg result add_mux         result_mux
-      //                                     rdy val  sel      en    sel      en    en     sel             sel
-      STATE_IDLE:                       cs(  1,  0,   a_ld,    1,    b_ld,    1,    1,     0,              0);
-      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, 1,    b_shift, 1,    1,     add_out,        add_mux_out );
-             else if ( do_shift )       cs(  0,  0,   a_shift, 1,    b_shift, 1,    1,     result_reg_out, add_mux_out );
-      STATE_DONE:                       cs(  0,  1,   a_x,     0,    b_x,     0,    0,     0,              0);
-      default                           cs( 'x, 'x,   a_x,     'x,   b_x,     'x,  'x,     add_x,          result_x);
+    cs(  0,  0,  a_x,  b_x,  0,  0,  0 ); // TODO: to fill cs
+    case ( state )
+      //                                     req resp a_mux    b_mux    result add_mux  result_mux
+      //                                     rdy val  sel      sel      en     sel      sel
+      STATE_IDLE:                       cs(  1,  0,   a_ld,    b_ld,    1,     0,       result_0 );
+      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, b_shift, 1,     add_add, result_add );
+             else if ( do_shift )       cs(  0,  0,   a_shift, b_shift, 1,     add_res, result_add );
+      STATE_DONE:                       cs(  0,  1,   a_x,     b_x,     0,     0,       0);
+      default                           cs( 'x, 'x,   a_x,     b_x,    'x,     add_x,   result_x );
 
     endcase
 
@@ -369,6 +341,29 @@ vc_BasicCounter#(5, 0, 32) cycle_counter // TODO: should we instead have vc_Basi
   end
 
 endmodule
+
+//========================================================================
+// Integer Multiplier Fixed-Latency Implementation
+//========================================================================
+
+module lab1_imul_IntMulBaseVRTL
+(
+  input  logic        clk,
+  input  logic        reset,
+
+  input  logic        req_val,
+  output logic        req_rdy,
+  input  logic [63:0] req_msg,
+
+  output logic        resp_val,
+  input  logic        resp_rdy,
+  output logic [31:0] resp_msg
+);
+
+  // ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  // Instantiate datapath and control models here and then connect them
+  // together.
+  // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   //----------------------------------------------------------------------
   // Connect Control Unit and Datapath
@@ -465,4 +460,3 @@ endmodule
 endmodule
 
 `endif /* LAB1_IMUL_INT_MUL_BASE_V */
-
