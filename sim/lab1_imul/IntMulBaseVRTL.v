@@ -31,11 +31,11 @@ module lab1_imul_IntMulBaseDpath
 
   // Control signals
 
-  input  logic [1:0]  a_mux_sel,      // Sel for mux in front of A reg
-  input  logic        b_mux_sel,      // sel for mux in front of B reg
-  input  logic        result_mux_sel, // sel for mux in front of result reg
-  input  logic        result_en,      // Enable for result reg
-  input  logic        add_mux_sel,    // sel for mux after adder
+  input  logic   a_mux_sel,      // Sel for mux in front of A reg
+  input  logic   b_mux_sel,      // sel for mux in front of B reg
+  input  logic   result_mux_sel, // sel for mux in front of result reg
+  input  logic   result_en,      // Enable for result reg
+  input  logic   add_mux_sel,    // sel for mux after adder
 
   // Status signals
 
@@ -115,17 +115,22 @@ module lab1_imul_IntMulBaseDpath
 
   // Adder
 
+  logic add_cout; 
+
   vc_Adder#(32) add
   (
     .in0   (a_reg_out),
     .in1   (result_reg_out),
-    .out   (add_out)
+    .cin   (0),
+    .out   (add_out),
+    .cout  (add_cout)
   );
 
   // Add mux
 
   logic [31:0] add_out;
   logic [31:0] result_reg_out;
+  logic [31:0] add_mux_out;
 
   vc_Mux2#(32) add_mux
   (
@@ -218,7 +223,7 @@ module lab1_imul_IntMulBaseCtrl
   logic      count_max; // Done goes high when the counter reaches a value of 32
   logic           incr; // Wire used to trigger incrementation in the fsm in CALC
   logic            clr; // Clear counter, triggered by DONE state
-  logic          count; // Count
+  logic [5:0]    count; // Count  
   logic  count_is_zero; // Count is zero
 
   // Combinatinoal logic block for the Counter Unit
@@ -230,7 +235,7 @@ module lab1_imul_IntMulBaseCtrl
 
   end
 
-vc_BasicCounter#(5, 0, 32) cycle_counter
+vc_BasicCounter#(6, 0, 32) cycle_counter
   (
    .clk           (cclk),
    .reset         (reset),
@@ -238,9 +243,12 @@ vc_BasicCounter#(5, 0, 32) cycle_counter
    .increment     (incr),
    .decrement     (0),
    .count_is_max  (count_max),
-   .count         (count),
-   .count_is_zero (count_is_zero)  // TODO: never used should we just skip them?
+   .count         (count), 
+   .count_is_zero (count_is_zero) 
   );
+
+  logic counter_not_max; 
+  logic add; 
 
   assign counter_not_max =        !count_is_max; // Multiply Cycle Counter
   assign add             =        b_lsb;         // LSB of the B value
@@ -318,7 +326,7 @@ vc_BasicCounter#(5, 0, 32) cycle_counter
 
   always_comb begin
 
-    cs(  0,  0,  a_x,  b_x,  0,  0,  0 ); // TODO: to fill cs
+    cs(  0,  0,  a_x,  b_x,  0,  0,  0 ); // TODO: Check cs
     case ( state )
       //                                     req resp a_mux    b_mux    result add_mux  result_mux
       //                                     rdy val  sel      sel      en     sel      sel
@@ -372,7 +380,7 @@ module lab1_imul_IntMulBaseVRTL
   // Control signals
 
   logic        result_en;
-  logic [1:0]  a_mux_sel;
+  logic        a_mux_sel;
   logic        b_mux_sel;
   logic        result_mux_sel;
   logic        add_mux_sel;
