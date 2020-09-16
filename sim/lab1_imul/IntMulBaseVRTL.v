@@ -95,6 +95,8 @@ module lab1_imul_IntMulBaseDpath
     .q     (b_reg_out)
   );
 
+  assign b_lsb = b_reg_out[0]; // TODO: not sure if b_lsb should be assigned this way
+
   // B shift right logical
 
   vc_RightLogicalShifter#(32,1) b_right_shifter
@@ -115,7 +117,7 @@ module lab1_imul_IntMulBaseDpath
 
   // Adder
 
-  logic add_cout; 
+  logic add_cout;
 
   vc_Adder#(32) add
   (
@@ -219,39 +221,36 @@ module lab1_imul_IntMulBaseCtrl
   state_t      state;
   state_t next_state;
 
+  // Counter
+
   logic           cclk; // Gated clock
   logic      count_max; // Done goes high when the counter reaches a value of 32
   logic           incr; // Wire used to trigger incrementation in the fsm in CALC
   logic            clr; // Clear counter, triggered by DONE state
-  logic [5:0]    count; // Count  
+  logic [5:0]    count; // Count
   logic  count_is_zero; // Count is zero
 
   // Combinatinoal logic block for the Counter Unit
   always_comb begin
 
-    cclk = clk && (state != STATE_IDLE);
+    // cclk = clk && (state != STATE_IDLE); // TODO: attemp to fix clk
     incr = (state == STATE_CALC);
     clr  = (state == STATE_DONE);
 
   end
 
-vc_BasicCounter#(6, 0, 32) cycle_counter
-  (
-   .clk           (cclk),
-   .reset         (reset),
-   .clear         (clr),
-   .increment     (incr),
-   .decrement     (0),
-   .count_is_max  (count_max),
-   .count         (count), 
-   .count_is_zero (count_is_zero) 
-  );
-
-  logic counter_not_max; 
-  logic add; 
-
-  assign counter_not_max =        !count_is_max; // Multiply Cycle Counter
-  assign add             =        b_lsb;         // LSB of the B value
+  vc_BasicCounter#(6, 0, 32) cycle_counter
+    (
+      .clk           (clk),
+    //  .clk           (cclk), // TODO: attemp to fix clk
+      .reset         (reset),
+      .clear         (clr),
+      .increment     (incr),
+      .decrement     (0),
+      .count_is_max  (count_max),
+      .count         (count),
+      .count_is_zero (count_is_zero)
+    );
 
   //----------------------------------------------------------------------
   // State Transitions
@@ -264,7 +263,7 @@ vc_BasicCounter#(6, 0, 32) cycle_counter
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( !counter_not_max )     next_state = STATE_DONE;
+      STATE_CALC: if ( count_is_max )         next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
@@ -319,8 +318,8 @@ vc_BasicCounter#(6, 0, 32) cycle_counter
   logic do_add_shift;
   logic do_shift;
 
-  assign do_add_shift = counter_not_max && b_lsb; // TODO: should we seperate the logic for add and shift?
-  assign do_shift     = counter_not_max && !b_lsb;
+  assign do_add_shift = !count_is_max && b_lsb; // TODO: should we seperate the logic for add and shift?
+  assign do_shift     = !count_is_max && !b_lsb;
 
   // Set outputs using a control signal "table"
 
@@ -429,6 +428,14 @@ module lab1_imul_IntMulBaseVRTL
     vc_trace.append_str( trace_str, " " );
 
     $sformat( str, "%x", dpath.b_reg_out );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.b_lsb );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.count_is_max );
     vc_trace.append_str( trace_str, str );
     vc_trace.append_str( trace_str, " " );
 
