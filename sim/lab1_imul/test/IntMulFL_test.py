@@ -93,6 +93,7 @@ random_msgs = [
 test_case_table = mk_test_case_table([
   (                      "msgs                 src_delay sink_delay"),
   [ "small_pos_pos",     small_pos_pos_msgs,   0,        0          ],
+  [ "random"       ,     random_msgs,          0,        0          ]
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to leverage the additional lists
