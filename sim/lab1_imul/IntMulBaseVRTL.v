@@ -264,7 +264,7 @@ module lab1_imul_IntMulBaseCtrl
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( !count_is_max )        next_state = STATE_DONE;
+      STATE_CALC: if ( count_is_max )        next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
@@ -304,12 +304,12 @@ module lab1_imul_IntMulBaseCtrl
     input logic cs_result_mux_sel
   );
   begin
-    req_rdy = cs_req_rdy;
-    resp_val = cs_resp_val;
-    result_en = cs_result_en;
-    a_mux_sel = cs_a_mux_sel;
-    b_mux_sel = cs_b_mux_sel;
-    add_mux_sel = cs_add_mux_sel;
+    req_rdy        = cs_req_rdy;
+    resp_val       = cs_resp_val;
+    result_en      = cs_result_en;
+    a_mux_sel      = cs_a_mux_sel;
+    b_mux_sel      = cs_b_mux_sel;
+    add_mux_sel    = cs_add_mux_sel;
     result_mux_sel = cs_result_mux_sel;
   end
   endtask
@@ -328,13 +328,13 @@ module lab1_imul_IntMulBaseCtrl
 
     cs(  0,  0,  a_x,  b_x,  0,  0,  0 ); // TODO: Check cs
     case ( state )
-      //                                     req resp a_mux    b_mux    result add_mux  result_mux
-      //                                     rdy val  sel      sel      en     sel      sel
-      STATE_IDLE:                       cs(  1,  0,   a_ld,    b_ld,    1,     add_x,   result_0 );
-      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, 0, 1,     add_add, result_add );
-             else if ( do_shift )       cs(  0,  0,   a_shift, b_shift, 1,     add_res, result_add );
-      STATE_DONE:                       cs(  0,  1,   a_x,     b_x,     0,     add_x,   0);
-      default                           cs( 'x, 'x,   a_x,     b_x,    'x,     add_x,   result_x );
+      //                                     req resp result a_mux    b_mux    add_mux  result_mux
+      //                                     rdy val  en     sel      sel      sel      sel
+      STATE_IDLE:                       cs(  1,  0,   1,     a_ld,    b_ld,    add_x,   result_0 );
+      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   1,     a_shift, b_shift, add_add, result_add );
+             else if ( do_shift )       cs(  0,  0,   1,     a_shift, b_shift, add_res, result_add );
+      STATE_DONE:                       cs(  0,  1,   0,     a_x,     b_x,     add_x,   0);
+      default                           cs( 'x, 'x,   'x,    a_x,     b_x,     add_x,   result_x );
 
     endcase
 
@@ -453,6 +453,10 @@ module lab1_imul_IntMulBaseVRTL
     vc_trace.append_str( trace_str, " " );
 
     $sformat( str, "%x", dpath.b_mux_sel );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.result_mux_out );
     vc_trace.append_str( trace_str, str );
     vc_trace.append_str( trace_str, " " );
 
