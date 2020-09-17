@@ -49,6 +49,7 @@ module lab1_imul_IntMulBaseDpath
   logic [31:0] req_msg_b = req_msg[31:0 ];
 
   // A Mux
+
   logic [31:0] a_shift_out;
   logic [31:0] a_mux_out;
 
@@ -199,8 +200,7 @@ module lab1_imul_IntMulBaseCtrl
   output logic  result_mux_sel,
 
   // Data Signals
-  input  logic  b_lsb,
-  input  logic  count_is_max
+  input  logic  b_lsb
 );
 
   //----------------------------------------------------------------------
@@ -224,7 +224,7 @@ module lab1_imul_IntMulBaseCtrl
   // Counter
 
   logic           cclk; // Gated clock
-  logic      count_max; // Done goes high when the counter reaches a value of 32
+  logic   count_is_max; // Done goes high when the counter reaches a value of 32
   logic           incr; // Wire used to trigger incrementation in the fsm in CALC
   logic            clr; // Clear counter, triggered by DONE state
   logic [5:0]    count; // Count
@@ -249,10 +249,9 @@ module lab1_imul_IntMulBaseCtrl
       .decrement     (0),
       .count         (count),
       .count_is_zero (count_is_zero),
-      .count_is_max  (count_max)
+      .count_is_max  (count_is_max)
     );
 
-  // assign count_is_max = count_max;
   //----------------------------------------------------------------------
   // State Transitions
   //----------------------------------------------------------------------
@@ -264,7 +263,7 @@ module lab1_imul_IntMulBaseCtrl
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( count_is_max )        next_state = STATE_DONE;
+      STATE_CALC: if ( count_is_max )         next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
