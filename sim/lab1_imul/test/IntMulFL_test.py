@@ -86,6 +86,15 @@ random_msgs = [
   req(  273, 9821 ), resp( 2681133 ),
 ]
 
+zero_msgs = [
+  req(  0,  1 ), resp(  0  ),
+  req( -1,  0 ), resp(  0  ),
+]
+
+negative_msgs = [
+  req( -1,  7 ), resp(  -7 ),
+]
+
 #-------------------------------------------------------------------------
 # Test Case Table
 #-------------------------------------------------------------------------
@@ -93,7 +102,36 @@ random_msgs = [
 test_case_table = mk_test_case_table([
   (                      "msgs                 src_delay sink_delay"),
   [ "small_pos_pos",     small_pos_pos_msgs,   0,        0          ],
-  [ "random"       ,     random_msgs,          0,        0          ]
+  [ "random"       ,     random_msgs,          0,        0          ],
+  [ "zero"         ,     zero_msgs,            0,        0          ],
+  [ "negative"     ,     negative_msgs,        0,        0          ]
+  
+# TODO: add random 
+# #-------------------------------------------------------------------------
+# # Test Case: random
+# #-------------------------------------------------------------------------
+
+# random.seed(0xdeadbeef)
+# random_msgs = []
+# for i in xrange(20):
+#   a = random.randint(0,0xffff)
+#   b = random.randint(0,0xffff)
+#   c = gcd( a, b )
+#   random_msgs.extend([ mk_req_msg( a, b ), c ])
+
+# TODO: add cycles 
+# #-------------------------------------------------------------------------
+# # Test Case Table
+# #-------------------------------------------------------------------------
+
+# test_case_table = mk_test_case_table([
+#   (               "msgs       src_delay sink_delay"),
+#   [ "basic_0x0",  basic_msgs, 0,        0          ],
+#   [ "basic_5x0",  basic_msgs, 5,        0          ],
+#   [ "basic_0x5",  basic_msgs, 0,        5          ],
+#   [ "basic_3x9",  basic_msgs, 3,        9          ],
+#   [ "random_3x9", basic_msgs, 3,        9          ],
+# ])
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to leverage the additional lists

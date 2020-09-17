@@ -96,7 +96,7 @@ module lab1_imul_IntMulBaseDpath
     .q     (b_reg_out)
   );
 
-  assign b_lsb = b_reg_out[0]; // TODO: not sure if b_lsb should be assigned this way
+  assign b_lsb = b_reg_out[0];
 
   // B shift right logical
 
@@ -223,7 +223,6 @@ module lab1_imul_IntMulBaseCtrl
 
   // Counter
 
-  logic           cclk; // Gated clock
   logic   count_is_max; // Done goes high when the counter reaches a value of 32
   logic           incr; // Wire used to trigger incrementation in the fsm in CALC
   logic            clr; // Clear counter, triggered by DONE state
@@ -233,7 +232,6 @@ module lab1_imul_IntMulBaseCtrl
   // Combinatinoal logic block for the Counter Unit
   always_comb begin
 
-    // cclk = clk && (state != STATE_IDLE); // TODO: attemp to fix clk
     incr = (state == STATE_CALC);
     clr  = (state == STATE_DONE);
 
@@ -242,7 +240,6 @@ module lab1_imul_IntMulBaseCtrl
   vc_BasicCounter#(6, 0, 32) cycle_counter
     (
       .clk           (clk),
-    //  .clk           (cclk), // TODO: attemp to fix clk
       .reset         (reset),
       .clear         (clr),
       .increment     (incr),
@@ -318,7 +315,7 @@ module lab1_imul_IntMulBaseCtrl
   logic do_add_shift;
   logic do_shift;
 
-  assign do_add_shift = !count_is_max && b_lsb; // TODO: should we seperate the logic for add and shift?
+  assign do_add_shift = !count_is_max && b_lsb;
   assign do_shift     = !count_is_max && !b_lsb;
 
   // Set outputs using a control signal "table"
