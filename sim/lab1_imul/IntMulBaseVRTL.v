@@ -117,6 +117,7 @@ module lab1_imul_IntMulBaseDpath
 
   // Adder
 
+  logic [31:0] add_out;
   logic add_cout;
 
   vc_Adder#(32) add
@@ -130,7 +131,6 @@ module lab1_imul_IntMulBaseDpath
 
   // Add mux
 
-  logic [31:0] add_out;
   logic [31:0] result_reg_out;
   logic [31:0] add_mux_out;
 
@@ -247,11 +247,12 @@ module lab1_imul_IntMulBaseCtrl
       .clear         (clr),
       .increment     (incr),
       .decrement     (0),
-      .count_is_max  (count_max),
       .count         (count),
-      .count_is_zero (count_is_zero)
+      .count_is_zero (count_is_zero),
+      .count_is_max  (count_max)
     );
 
+  // assign count_is_max = count_max;
   //----------------------------------------------------------------------
   // State Transitions
   //----------------------------------------------------------------------
@@ -263,7 +264,7 @@ module lab1_imul_IntMulBaseCtrl
     case( state )
 
       STATE_IDLE: if ( req_val && req_rdy )   next_state = STATE_CALC;
-      STATE_CALC: if ( count_is_max )         next_state = STATE_DONE;
+      STATE_CALC: if ( !count_is_max )        next_state = STATE_DONE;
       STATE_DONE: if ( resp_val && resp_rdy ) next_state = STATE_IDLE;
       default:    next_state = 'x;
 
@@ -277,16 +278,16 @@ module lab1_imul_IntMulBaseCtrl
   // Task allows all of the outputs to be "bundled together"
 
   localparam a_x        = 1'dx;
-  localparam a_ld       = 1'd0;
-  localparam a_shift    = 1'd1;
+  localparam a_shift    = 1'd0;
+  localparam a_ld       = 1'd1;
 
   localparam b_x        = 1'dx;
-  localparam b_ld       = 1'd0;
-  localparam b_shift    = 1'd1;
+  localparam b_shift    = 1'd0;
+  localparam b_ld       = 1'd1;
 
   localparam add_x      = 1'dx;
-  localparam add_res    = 1'd0;
-  localparam add_add    = 1'd1;
+  localparam add_add    = 1'd0;
+  localparam add_res    = 1'd1;
 
   localparam result_x   = 1'dx;
   localparam result_add = 1'd0;
@@ -329,10 +330,10 @@ module lab1_imul_IntMulBaseCtrl
     case ( state )
       //                                     req resp a_mux    b_mux    result add_mux  result_mux
       //                                     rdy val  sel      sel      en     sel      sel
-      STATE_IDLE:                       cs(  1,  0,   a_ld,    b_ld,    1,     0,       result_0 );
-      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, b_shift, 1,     add_add, result_add );
+      STATE_IDLE:                       cs(  1,  0,   a_ld,    b_ld,    1,     add_x,   result_0 );
+      STATE_CALC: if ( do_add_shift )   cs(  0,  0,   a_shift, 0, 1,     add_add, result_add );
              else if ( do_shift )       cs(  0,  0,   a_shift, b_shift, 1,     add_res, result_add );
-      STATE_DONE:                       cs(  0,  1,   a_x,     b_x,     0,     0,       0);
+      STATE_DONE:                       cs(  0,  1,   a_x,     b_x,     0,     add_x,   0);
       default                           cs( 'x, 'x,   a_x,     b_x,    'x,     add_x,   result_x );
 
     endcase
@@ -436,6 +437,22 @@ module lab1_imul_IntMulBaseVRTL
     vc_trace.append_str( trace_str, " " );
 
     $sformat( str, "%x", dpath.count_is_max );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.a_shift_out );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.b_shift_out );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.a_mux_sel );
+    vc_trace.append_str( trace_str, str );
+    vc_trace.append_str( trace_str, " " );
+
+    $sformat( str, "%x", dpath.b_mux_sel );
     vc_trace.append_str( trace_str, str );
     vc_trace.append_str( trace_str, " " );
 
