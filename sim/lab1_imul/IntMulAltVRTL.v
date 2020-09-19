@@ -98,7 +98,7 @@ module lab1_imul_IntMulAltDpath
   assign b_lsb = b_reg_out[0];
 
   // Look ahead to find # of zeros in multiplicand
-
+  /*   
   always_comb begin
     shift_count = 4'd1;
     casez ( b_reg_out[7:1] )
@@ -108,19 +108,44 @@ module lab1_imul_IntMulAltDpath
       7'b???1000: shift_count = 4'd4;
       7'b??10000: shift_count = 4'd5;
       7'b?100000: shift_count = 4'd6;
-      7'b1000000: shift_count = 4'd7;                          
+      7'b1000000: shift_count = 4'd7;                   
       default: shift_count = 4'd1;
     endcase
   end
+  */
+  always_comb begin
+    shift_count = 4'd1;
+    casez ( b_reg_out[15:1] )
+      15'b??????????????1: shift_count = 4'd01;
+      15'b?????????????10: shift_count = 4'd02;
+      15'b????????????100: shift_count = 4'd03;
+      15'b???????????1000: shift_count = 4'd04;
+      15'b??????????10000: shift_count = 4'd05;
+      15'b?????????100000: shift_count = 4'd06;
+      15'b????????1000000: shift_count = 4'd07;
+      15'b???????10000000: shift_count = 4'd08;
+      15'b??????100000000: shift_count = 4'd09;
+      15'b?????1000000000: shift_count = 4'd10;
+      15'b????10000000000: shift_count = 4'd11;
+      15'b???100000000000: shift_count = 4'd12;
+      15'b??1000000000000: shift_count = 4'd13;
+      15'b?10000000000000: shift_count = 4'd14;                           
+      15'b100000000000000: shift_count = 4'd15;
+      default shift_count = 4'd1;
+    endcase
+  end
+  
  
   // B shift right logical
 
-  vc_RightLogicalShifter#(32,4) b_right_shifter
-  (
-    .in    (b_reg_out),
-    .out   (b_shift_out),
-    .shamt (shift_count)
-  );
+
+  assign b_shift_out = ( b_reg_out >>> shift_count);
+  //vc_RightLogicalShifter#(32,4) b_right_shifter
+  //(
+  //  .in    (b_reg_out),
+  //  .out   (b_shift_out),
+  //  .shamt (shift_count)
+  //);
 
   // A shift left logical
 
@@ -248,7 +273,7 @@ module lab1_imul_IntMulAltCtrl
   // Combinatinoal logic block for the Counter Unit
   always_comb begin
     incr = (state == STATE_CALC);
-    clr  = (state == STATE_DONE);
+    clr  = (state != STATE_CALC);
   end
 
   lab1_imul_IntMulAltCtrlRegIncr cycle_counter
