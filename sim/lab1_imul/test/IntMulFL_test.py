@@ -91,8 +91,24 @@ zero_msgs = [
   req( -1,  0 ), resp(  0  ),
 ]
 
-negative_msgs = [
+small_neg_pos_msgs = [
   req( -1,  7 ), resp(  -7 ),
+]
+
+small_neg_neg_msgs = [
+  req( -1,  -7 ), resp(  7 ),
+]
+
+large_pos_pos_msgs = [
+  req( 14271,  65275 ), resp(  931539525 ),
+]
+
+large_pos_neg_msgs = [
+  req( -14271,  65275 ), resp(  -931539525 ),
+]
+
+large_neg_neg_msgs = [
+  req( -14271,  65275 ), resp(  931539525 ),
 ]
 
 #-------------------------------------------------------------------------
@@ -104,8 +120,13 @@ test_case_table = mk_test_case_table([
   [ "small_pos_pos",     small_pos_pos_msgs,   0,        0          ],
   [ "random"       ,     random_msgs,          0,        0          ],
   [ "zero"         ,     zero_msgs,            0,        0          ],
-  [ "negative"     ,     negative_msgs,        0,        0          ]
-  
+  [ "small_neg_pos",     small_neg_pos_msgs,   0,        0          ],
+  [ "small_neg_neg",     small_neg_neg_msgs,   0,        0          ],
+  [ "large_pos_pos",     large_pos_pos_msgs,   0,        0          ],
+  [ "large_pos_neg",     large_pos_neg_msgs,   0,        0          ],
+  [ "large_neg_neg",     large_neg_neg_msgs,   0,        0          ]
+
+
 # TODO: add random 
 # #-------------------------------------------------------------------------
 # # Test Case: random
