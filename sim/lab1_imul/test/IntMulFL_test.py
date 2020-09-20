@@ -108,8 +108,32 @@ large_pos_neg_msgs = [
 ]
 
 large_neg_neg_msgs = [
-  req( -14271,  65275 ), resp(  931539525 ),
+  req( -14271,  -65275 ), resp(  931539525 ),
 ]
+
+random_large_pp_msgs = []
+for i in xrange(100):
+  a = random.randint(0,2147483648)
+  b = random.randint(0,2147483648)
+  random_large_pp_msgs.extend([req( a, b ),resp( a * b )])
+
+random_large_pn_msgs = []
+for i in xrange(100):
+  a = random.randint(0, 2147483648)
+  b = random.randint(-2147483647,0)
+  random_large_pn_msgs.extend([req( a, b ), resp( a * b )])
+
+random_large_np_msgs = []
+for i in xrange(100):
+  a = random.randint(-2147483647,0)
+  b = random.randint(0, 2147483648)
+  random_large_np_msgs.extend([req( a, b ), resp( a * b )])
+
+random_large_nn_msgs = []
+for i in xrange(100):
+  a = random.randint(-2147483647,0)
+  b = random.randint(-2147483647,0)
+  random_large_nn_msgs.extend([req( a, b ), resp( a * b )])
 
 #-------------------------------------------------------------------------
 # Test Case Table
@@ -124,42 +148,25 @@ test_case_table = mk_test_case_table([
   [ "small_neg_neg",     small_neg_neg_msgs,   0,        0          ],
   [ "large_pos_pos",     large_pos_pos_msgs,   0,        0          ],
   [ "large_pos_neg",     large_pos_neg_msgs,   0,        0          ],
-  [ "large_neg_neg",     large_neg_neg_msgs,   0,        0          ]
+  [ "large_neg_neg",     large_neg_neg_msgs,   0,        0          ],
+  [ "rand_large_pp",     random_large_pp_msgs, 0,        0          ],
+  [ "rand_large_np",     random_large_np_msgs, 0,        0          ],
+  [ "rand_large_pn",     random_large_pn_msgs, 0,        0          ],
+  [ "rand_large_nn",     random_large_nn_msgs, 0,        0          ],
+])
 
-
-# TODO: add random 
-# #-------------------------------------------------------------------------
-# # Test Case: random
-# #-------------------------------------------------------------------------
-
-# random.seed(0xdeadbeef)
-# random_msgs = []
-# for i in xrange(20):
-#   a = random.randint(0,0xffff)
-#   b = random.randint(0,0xffff)
-#   c = gcd( a, b )
-#   random_msgs.extend([ mk_req_msg( a, b ), c ])
-
-# TODO: add cycles 
-# #-------------------------------------------------------------------------
-# # Test Case Table
-# #-------------------------------------------------------------------------
-
-# test_case_table = mk_test_case_table([
-#   (               "msgs       src_delay sink_delay"),
-#   [ "basic_0x0",  basic_msgs, 0,        0          ],
-#   [ "basic_5x0",  basic_msgs, 5,        0          ],
-#   [ "basic_0x5",  basic_msgs, 0,        5          ],
-#   [ "basic_3x9",  basic_msgs, 3,        9          ],
-#   [ "random_3x9", basic_msgs, 3,        9          ],
-# ])
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to leverage the additional lists
-  # of request/response messages defined above, but also to test
-  # different source/sink random delays.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
+rand_delay_case_table = mk_test_case_table([
+  (                "msgs                 src_delay              sink_delay"),
+  [ "rand_delay_0", small_pos_pos_msgs,   random.randint(0,1000), random.randint(0,1000)],
+  [ "rand_delay_1", small_pos_pos_msgs,   random.randint(0,1000), random.randint(0,1000)],
+  [ "rand_delay_2", small_pos_pos_msgs,   random.randint(0,1000), random.randint(0,1000)],
+  [ "rand_delay_3", small_pos_pos_msgs,   random.randint(0,1000), random.randint(0,1000)],
+  [ "rand_delay_4", small_pos_pos_msgs,   random.randint(0,1000), random.randint(0,1000)],
+  [ "rand_delay_5", small_pos_pos_msgs,   random.randint(0,500), random.randint(500,1000)],
+  [ "rand_delay_6", small_pos_pos_msgs,   random.randint(0,500), random.randint(500,1000)],
+  [ "rand_delay_7", small_pos_pos_msgs,   random.randint(0,500), random.randint(500,1000)],
+  [ "rand_delay_8", small_pos_pos_msgs,   random.randint(0,500), random.randint(500,1000)],
+  [ "rand_delay_9", small_pos_pos_msgs,   random.randint(0,500), random.randint(500,1000)]
 ])
 
 #-------------------------------------------------------------------------
@@ -167,9 +174,15 @@ test_case_table = mk_test_case_table([
 #-------------------------------------------------------------------------
 
 @pytest.mark.parametrize( **test_case_table )
-def test( test_params, dump_vcd ):
+def test_mul_logic( test_params, dump_vcd ):
   run_sim( TestHarness( IntMulFL(),
                         test_params.msgs[::2], test_params.msgs[1::2],
                         test_params.src_delay, test_params.sink_delay ),
            dump_vcd )
 
+@pytest.mark.parametrize( **rand_delay_case_table )
+def test_rand_delay( test_params, dump_vcd ):
+  run_sim( TestHarness( IntMulFL(),
+                        test_params.msgs[::2], test_params.msgs[1::2],
+                        test_params.src_delay, test_params.sink_delay ),
+           dump_vcd )
