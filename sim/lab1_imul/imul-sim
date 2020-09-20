@@ -72,6 +72,29 @@ for i in xrange(50):
 # are not for testing; your design should already be thoroughly tested
 # before you begin your evaluation.
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+random_large_pp_msgs = []
+for i in xrange(1000):
+  a = random.randint(0,2147483648)
+  b = random.randint(0,2147483648)
+  random_large_pp_msgs.extend([req( a, b ),resp( a * b )])
+
+random_large_pn_msgs = []
+for i in xrange(1000):
+  a = random.randint(0, 2147483648)
+  b = random.randint(-2147483647,0)
+  random_large_pn_msgs.extend([req( a, b ), resp( a * b )])
+
+random_large_np_msgs = []
+for i in xrange(1000):
+  a = random.randint(-2147483647,0)
+  b = random.randint(0, 2147483648)
+  random_large_np_msgs.extend([req( a, b ), resp( a * b )])
+
+random_large_nn_msgs = []
+for i in xrange(1000):
+  a = random.randint(-2147483647,0)
+  b = random.randint(-2147483647,0)
+  random_large_nn_msgs.extend([req( a, b ), resp( a * b )])
 
 #-------------------------------------------------------------------------
 # Command line processing
@@ -103,7 +126,7 @@ def parse_cmdline():
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   p.add_argument( "--input", default="small",
-    choices=["small"] )
+                  choices=["small", "large_pp", "large_pn", "large_np", "large_nn" ] )
 
   p.add_argument( "--trace",     action="store_true" )
   p.add_argument( "--stats",     action="store_true" )
@@ -132,6 +155,14 @@ def main():
 
   if opts.input == "small":
     inputs = random_small_msgs
+  if opts.input == "large_pp":
+    inputs = random_large_pp_msgs
+  if opts.input == "large_pn":
+    inputs = random_large_pn_msgs
+  if opts.input == "large_np":
+    inputs = random_large_np_msgs
+  if opts.input == "large_nn":
+    inputs = random_large_nn_msgs
 
   ninputs = len(inputs[::2])
 
@@ -169,7 +200,7 @@ def main():
 
   # Run simulation
 
-  while not th.done() and sim.ncycles < 5000:
+  while not th.done() and sim.ncycles < 50000:
 
     if opts.trace:
       sim.print_line_trace()
