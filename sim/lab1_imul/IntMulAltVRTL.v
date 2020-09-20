@@ -98,39 +98,39 @@ module lab1_imul_IntMulAltDpath
   assign b_lsb = b_reg_out[0];
 
   // Look ahead to find # of zeros in multiplicand
-  /*   
+  /*
   always_comb begin
     shift_count = 4'd1;
-    casez ( b_reg_out[7:1] )
-      7'b??????1: shift_count = 4'd1;
-      7'b?????10: shift_count = 4'd2;
-      7'b????100: shift_count = 4'd3;
-      7'b???1000: shift_count = 4'd4;
-      7'b??10000: shift_count = 4'd5;
-      7'b?100000: shift_count = 4'd6;
-      7'b1000000: shift_count = 4'd7;                   
+    casez ( b_reg_out[6:1] )
+      6'b?????1: shift_count = 4'd1;
+      6'b????10: shift_count = 4'd2;
+      6'b???100: shift_count = 4'd3;
+      6'b??1000: shift_count = 4'd4;
+      6'b?10000: shift_count = 4'd5;
+      6'b100000: shift_count = 4'd6;
+      6'b000000: shift_count = 4'd7;                   
       default: shift_count = 4'd1;
     endcase
   end
   */
   always_comb begin
     shift_count = 4'd1;
-    casez ( b_reg_out[15:1] )
-      15'b??????????????1: shift_count = 4'd01;
-      15'b?????????????10: shift_count = 4'd02;
-      15'b????????????100: shift_count = 4'd03;
-      15'b???????????1000: shift_count = 4'd04;
-      15'b??????????10000: shift_count = 4'd05;
-      15'b?????????100000: shift_count = 4'd06;
-      15'b????????1000000: shift_count = 4'd07;
-      15'b???????10000000: shift_count = 4'd08;
-      15'b??????100000000: shift_count = 4'd09;
-      15'b?????1000000000: shift_count = 4'd10;
-      15'b????10000000000: shift_count = 4'd11;
-      15'b???100000000000: shift_count = 4'd12;
-      15'b??1000000000000: shift_count = 4'd13;
-      15'b?10000000000000: shift_count = 4'd14;                           
-      15'b100000000000000: shift_count = 4'd15;
+    casez ( b_reg_out[14:1] )
+      14'b?????????????1: shift_count = 4'd01;
+      14'b????????????10: shift_count = 4'd02;
+      14'b???????????100: shift_count = 4'd03;
+      14'b??????????1000: shift_count = 4'd04;
+      14'b?????????10000: shift_count = 4'd05;
+      14'b????????100000: shift_count = 4'd06;
+      14'b???????1000000: shift_count = 4'd07;
+      14'b??????10000000: shift_count = 4'd08;
+      14'b?????100000000: shift_count = 4'd09;
+      14'b????1000000000: shift_count = 4'd10;
+      14'b???10000000000: shift_count = 4'd11;
+      14'b??100000000000: shift_count = 4'd12;
+      14'b?1000000000000: shift_count = 4'd13;
+      14'b10000000000000: shift_count = 4'd14;                           
+      14'b00000000000000: shift_count = 4'd15;
       default shift_count = 4'd1;
     endcase
   end
@@ -139,7 +139,7 @@ module lab1_imul_IntMulAltDpath
   // B shift right logical
 
 
-  assign b_shift_out = ( b_reg_out >>> shift_count);
+  assign b_shift_out = ( b_reg_out >> shift_count);
   //vc_RightLogicalShifter#(32,4) b_right_shifter
   //(
   //  .in    (b_reg_out),
@@ -433,7 +433,7 @@ module lab1_imul_IntMulAltCtrlRegIncr
   );
 
   assign count_is_zero = (count == 0);
-  assign count_is_max  = (count == 32);
+  assign count_is_max  = (count >= 32);
  
 endmodule
 

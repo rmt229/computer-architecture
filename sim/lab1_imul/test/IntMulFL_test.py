@@ -113,27 +113,33 @@ large_neg_neg_msgs = [
 
 random_large_pp_msgs = []
 for i in xrange(100):
-  a = random.randint(0,2147483648)
-  b = random.randint(0,2147483648)
+  a = random.randint(0,214748364)
+  b = random.randint(0,214748364)
   random_large_pp_msgs.extend([req( a, b ),resp( a * b )])
 
 random_large_pn_msgs = []
 for i in xrange(100):
-  a = random.randint(0, 2147483648)
-  b = random.randint(-2147483647,0)
+  a = random.randint(0, 214748364)
+  b = random.randint(-214748364,0)
   random_large_pn_msgs.extend([req( a, b ), resp( a * b )])
 
 random_large_np_msgs = []
 for i in xrange(100):
-  a = random.randint(-2147483647,0)
-  b = random.randint(0, 2147483648)
+  a = random.randint(-214748364,0)
+  b = random.randint(0, 214748364)
   random_large_np_msgs.extend([req( a, b ), resp( a * b )])
 
 random_large_nn_msgs = []
 for i in xrange(100):
-  a = random.randint(-2147483647,0)
-  b = random.randint(-2147483647,0)
+  a = random.randint(-214748364,0)
+  b = random.randint(-214748364,0)
   random_large_nn_msgs.extend([req( a, b ), resp( a * b )])
+
+random_identity_msgs =[]
+for i in xrange(50):
+  a = random.randint(-214748364, 214748364)
+  random_identity_msgs.extend([req(a, 1),resp(a)])
+
 
 #-------------------------------------------------------------------------
 # Test Case Table
@@ -153,6 +159,7 @@ test_case_table = mk_test_case_table([
   [ "rand_large_np",     random_large_np_msgs, 0,        0          ],
   [ "rand_large_pn",     random_large_pn_msgs, 0,        0          ],
   [ "rand_large_nn",     random_large_nn_msgs, 0,        0          ],
+  [ "rand_identity",     random_identity_msgs, 0,        0          ]
 ])
 
 rand_delay_case_table = mk_test_case_table([

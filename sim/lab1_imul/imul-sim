@@ -96,6 +96,35 @@ for i in xrange(1000):
   b = random.randint(-2147483647,0)
   random_large_nn_msgs.extend([req( a, b ), resp( a * b )])
 
+random_small_nn_msgs = []
+for i in xrange(1000):
+  a = random.randint(-32768,0)
+  b = random.randint(-32768,0)
+  random_small_nn_msgs.extend([req( a, b ), resp( a * b )])
+
+random_small_pp_msgs = []
+for i in xrange(1000):
+  a = random.randint(0, 32767)
+  b = random.randint(0, 32767)
+  random_small_pp_msgs.extend([req( a, b ), resp( a * b )])
+
+random_small_pn_msgs = []
+for i in xrange(1000):
+  a = random.randint(0, 32767)
+  b = random.randint(-32768,0)
+  random_small_pn_msgs.extend([req( a, b ), resp( a * b )])
+
+random_small_np_msgs = []
+for i in xrange(1000):
+  a = random.randint(-32768,0)
+  b = random.randint(0, 32767)
+  random_small_np_msgs.extend([req( a, b ), resp( a * b )])
+
+identity = []
+identity.extend([req( 1, 128),resp( 128)])
+identity.extend([req( 1, -128),resp(-128)])
+
+
 #-------------------------------------------------------------------------
 # Command line processing
 #-------------------------------------------------------------------------
@@ -126,7 +155,7 @@ def parse_cmdline():
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
   p.add_argument( "--input", default="small",
-                  choices=["small", "large_pp", "large_pn", "large_np", "large_nn" ] )
+                  choices=["small", "large_pp", "large_pn", "large_np", "large_nn", "small_pp", "small_nn", "small_pn", "small_np", "identity"] )
 
   p.add_argument( "--trace",     action="store_true" )
   p.add_argument( "--stats",     action="store_true" )
@@ -163,6 +192,16 @@ def main():
     inputs = random_large_np_msgs
   if opts.input == "large_nn":
     inputs = random_large_nn_msgs
+  if opts.input == "small_pp":
+    inputs = random_small_pp_msgs
+  if opts.input == "small_nn":
+    inputs = random_small_nn_msgs
+  if opts.input == "small_pn":
+    inputs = random_small_pn_msgs
+  if opts.input == "small_np":
+    inputs = random_small_np_msgs
+  if opts.input == "identity":
+    inputs = identity
 
   ninputs = len(inputs[::2])
 
