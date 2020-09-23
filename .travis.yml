@@ -51,4 +51,5 @@ before_script:
 
 script:
  - py.test --verbose ../lab1_imul
+ - python ../lab1_imul/imul_sim_staff_eval.py
 
