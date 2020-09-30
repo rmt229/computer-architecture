@@ -15,8 +15,8 @@ and pushing your changes back to GitHub, or by using the following link:
 Please update the following list of group members, including the NetIDs
 for each group member.
 
- * Student Name (NetID)
- * Student Name (NetID)
+ * Huan Qi (hq38)
+ * Raquel Taborga (rmt229)
  * Student Name (NetID)
 
 ### Member Roles
