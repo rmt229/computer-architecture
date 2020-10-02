@@ -224,7 +224,6 @@ import inst_srl
 ])
 def test_srl( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
-  asm_test( inst_sll.gen_dest_dep_test  ) ,
 # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # random stall and delay
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
