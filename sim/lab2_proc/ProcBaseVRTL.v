@@ -119,7 +119,9 @@ module lab2_proc_ProcBaseVRTL
   logic [1:0]  op2_sel_D;
   logic [1:0]  csrr_sel_D;
   logic [2:0]  imm_type_D;
+  logic        imul_req_val_D; 
 
+  logic        imul_resp_rdy_X; 
   logic        reg_en_X;
   logic [3:0]  alu_fn_X;
 
@@ -134,7 +136,12 @@ module lab2_proc_ProcBaseVRTL
   // status signals (dpath->ctrl)
 
   logic [31:0] inst_D;
+  logic        imul_req_rdy_D; 
+
+  logic        imul_resp_val_X; 
   logic        br_cond_eq_X;
+  logic        br_cond_lt_X;
+  logic        br_cond_ltu_X;
 
   //----------------------------------------------------------------------
   // Pack Memory Request Messages
@@ -217,9 +224,11 @@ module lab2_proc_ProcBaseVRTL
     .op2_sel_D              (op2_sel_D),
     .csrr_sel_D             (csrr_sel_D),
     .imm_type_D             (imm_type_D),
+    .imul_req_val_D         (imul_req_val_D),
 
     .reg_en_X               (reg_en_X),
     .alu_fn_X               (alu_fn_X),
+    .imul_resp_rdy_X        (imul_resp_rdy_X),
 
     .reg_en_M               (reg_en_M),
     .wb_result_sel_M        (wb_result_sel_M),
@@ -232,7 +241,12 @@ module lab2_proc_ProcBaseVRTL
     // status signals (dpath->ctrl)
 
     .inst_D                 (inst_D),
+    .imul_req_rdy_D         (imul_req_rdy_D),
+
+    .imul_resp_val_X        (imul_resp_val_X),
     .br_cond_eq_X           (br_cond_eq_X),
+    .br_cond_lt_X           (br_cond_lt_X),
+    .br_cond_ltu_X          (br_cond_ltu_X),
 
     .commit_inst            (commit_inst)
   );
@@ -330,9 +344,11 @@ module lab2_proc_ProcBaseVRTL
     .op2_sel_D               (op2_sel_D),
     .csrr_sel_D              (csrr_sel_D),
     .imm_type_D              (imm_type_D),
+    .imul_req_val_D          (imul_req_val_D),
 
     .reg_en_X                (reg_en_X),
     .alu_fn_X                (alu_fn_X),
+    .imul_resp_rdy_X         (imul_resp_rdy_X),
 
     .reg_en_M                (reg_en_M),
     .wb_result_sel_M         (wb_result_sel_M),
@@ -345,7 +361,12 @@ module lab2_proc_ProcBaseVRTL
     // status signals (dpath->ctrl)
 
     .inst_D                  (inst_D),
+    .imul_req_rdy_D          (imul_req_rdy_D), 
+
+    .imul_resp_val_X         (imul_resp_val_X),
     .br_cond_eq_X            (br_cond_eq_X),
+    .br_cond_lt_X            (br_cond_lt_X),
+    .br_cond_ltu_X           (br_cond_ltu_X),
 
     // stats_en
 

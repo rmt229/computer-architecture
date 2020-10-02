@@ -70,7 +70,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   input  logic        imul_resp_val_X, // TODO: Thought would be useful 
   input  logic        br_cond_eq_X,
   input  logic        br_cond_lt_X,    // TODO: Thought would be useful 
-  input  logic        br_cond_ltu_X,   // TODO: Thought would be useful 
+  input  logic        br_cond_ltu_X,    
 
   output logic        stats_en_wen_W,
 
@@ -256,6 +256,11 @@ module lab2_proc_ProcBaseCtrlVRTL
   localparam br_x     = 3'bx; // Don't care
   localparam br_na    = 3'b0; // No branch
   localparam br_bne   = 3'b1; // bne
+  localparam br_beq   = 3'd2; // beq TODO: Thought would be useful
+  localparam br_blt    = 3'd3; // blt
+  localparam br_bltu   = 3'd4; // bltu
+  localparam br_bge    = 3'd5; // bge
+  localparam br_bgeu   = 3'd6; // bgeu
 
   // Operand 1 Mux Select
 
@@ -384,11 +389,11 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_JAL     :cs( y, br_na,  imm_j, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_JALR    :cs( y, br_na,  imm_j, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BNE     :cs( y, br_bne, imm_b, y, bm_rf,  y, alu_x,   nr, wm_a, n,  n,   n    );
-      `RV2ISA_INST_BEQ     :cs( y, br_na,  imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_BLT     :cs( y, br_na,  imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_BLTU    :cs( y, br_na,  imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_BGE     :cs( y, br_na,  imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_BGEU    :cs( y, br_na,  imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BEQ     :cs( y, br_beq, imm_b, y, bm_rf,  y, alu_x,   nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BLT     :cs( y, br_blt, imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BLTU    :cs( y, br_bltu,imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BGE     :cs( y, br_bge, imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BGEU    :cs( y, br_bgeu,imm_b, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_CSRR    :cs( y, br_na,  imm_i, n, bm_csr, n, alu_cp1, nr, wm_a, y,  y,   n    );
       `RV2ISA_INST_CSRW    :cs( y, br_na,  imm_i, y, bm_rf,  n, alu_cp0, nr, wm_a, n,  n,   y    );
 
