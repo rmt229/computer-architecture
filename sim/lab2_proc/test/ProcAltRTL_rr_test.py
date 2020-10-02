@@ -229,7 +229,7 @@ import inst_sll
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sll.gen_basic_test     ) ,
-
+  asm_test( inst_sll.gen_dest_dep_test  ) ,
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
   # scenarios.
