@@ -53,9 +53,11 @@ module lab2_proc_ProcBaseDpathVRTL
   input  logic [1:0]  op2_sel_D,
   input  logic [1:0]  csrr_sel_D,
   input  logic [2:0]  imm_type_D,
+  input  logic        imul_req_val_D, 
 
   input  logic        reg_en_X,
   input  logic [3:0]  alu_fn_X,
+  input  logic        imul_resp_rdy_X, 
 
   input  logic        reg_en_M,
   input  logic        wb_result_sel_M,
@@ -68,7 +70,12 @@ module lab2_proc_ProcBaseDpathVRTL
   // status signals (dpath->ctrl)
 
   output logic [31:0] inst_D,
+  output logic        imul_req_rdy_D,  // TODO: Thought would be useful 
+
   output logic        br_cond_eq_X,
+  output logic        br_cond_lt_X,    // TODO: Thought would be useful 
+  output logic        br_cond_ltu_X,   // TODO: Thought would be useful 
+  output logic        imul_resp_val_X, // TODO: Thought would be useful 
 
   // stats output
 
@@ -272,16 +279,18 @@ module lab2_proc_ProcBaseDpathVRTL
 
   assign dmemreq_msg_addr = alu_result_X;
 
-  // lab1_imul_IntMulAltVRTL mul
-  // (
-  //   .clk      (clk),
-  //   .reset    (reset),
-  //   .req_val  (), // TODO: stall signal
-  //   .req_rdy  (),
-  //   .resp_val (),
-  //   .resp_rdy (),
-  //   .resp_msg ()
-  // );
+  logic [31:0] imul_resp_msg;
+  
+  lab1_imul_IntMulAltVRTL mul
+  (
+    .clk      (clk),
+    .reset    (reset),
+    .req_val  (imul_req_val_D), // TODO: stall signal
+    .req_rdy  (imul_req_rdy_D), 
+    .resp_val (imul_resp_val_X),
+    .resp_rdy (imul_resp_rdy_X),
+    .resp_msg (imul_resp_msg)
+  );
 
   //--------------------------------------------------------------------
   // M stage

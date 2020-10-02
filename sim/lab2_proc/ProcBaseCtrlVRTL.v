@@ -49,9 +49,11 @@ module lab2_proc_ProcBaseCtrlVRTL
   output logic [1:0]  op2_sel_D,
   output logic [1:0]  csrr_sel_D,
   output logic [2:0]  imm_type_D,
+  output logic        imul_req_val_D,  // TODO: Thought would be useful
 
   output logic        reg_en_X,
   output logic [3:0]  alu_fn_X,
+  output logic        imul_resp_rdy_X,  // TODO: Thought would be useful
 
   output logic        reg_en_M,
   output logic        wb_result_sel_M,
@@ -63,7 +65,12 @@ module lab2_proc_ProcBaseCtrlVRTL
   // status signals (dpath->ctrl)
 
   input  logic [31:0] inst_D,
+  input  logic        imul_req_rdy_D,  // TODO: Thought would be useful 
+
+  input  logic        imul_resp_val_X, // TODO: Thought would be useful 
   input  logic        br_cond_eq_X,
+  input  logic        br_cond_lt_X,    // TODO: Thought would be useful 
+  input  logic        br_cond_ltu_X,   // TODO: Thought would be useful 
 
   output logic        stats_en_wen_W,
 
