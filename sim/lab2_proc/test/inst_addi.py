@@ -150,7 +150,7 @@ def gen_random_test():
   asm_code = []
   for i in xrange(100):
     src0 = Bits( 32, random.randint(0,0xffffffff) )
-    src1 = Bits( 32, random.randint(0,0xffffffff) )
-    dest = src0 + src1
-    asm_code.append( gen_rimm_value_test( "addi", src0.uint(), src1.uint(), dest.uint() ) )
+    imm = random.randint(0,0xffffffff)
+    dest = src0 + imm
+    asm_code.append( gen_rimm_value_test( "addi", src0.uint(), imm, dest.uint() ) )
   return asm_code
