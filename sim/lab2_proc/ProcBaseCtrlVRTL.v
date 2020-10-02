@@ -370,15 +370,15 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_SRAI    :cs( y, br_na,  imm_i, y, bm_imm, y, alu_sra, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_SRLI    :cs( y, br_na,  imm_i, y, bm_imm, y, alu_srl, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_SLLI    :cs( y, br_na,  imm_i, y, bm_imm, y, alu_sll, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_LUI     :cs( y, br_na,  imm_i, y, bm_imm, y, alu_lui, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_AUIPC   :cs( y, br_na,  imm_i, y, bm_imm, n, alu_aui, ld, wm_m, y,  n,   n    );
+      // `RV2ISA_INST_LUI     :cs( y, br_na,  imm_i, y, bm_imm, y, alu_lui, nr, wm_a, y,  n,   n    );
+      // `RV2ISA_INST_AUIPC   :cs( y, br_na,  imm_i, y, bm_imm, n, alu_aui, ld, wm_m, y,  n,   n    );
       `RV2ISA_INST_LW      :cs( y, br_na,  imm_i, y, bm_imm, n, alu_add, ld, wm_m, y,  n,   n    );
       `RV2ISA_INST_SW      :cs( y, br_na,  imm_x, y, bm_imm, y, alu_add, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_JAL     :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_JALR    :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BNE     :cs( y, br_bne, imm_b, y, bm_rf,  y, alu_x,   nr, wm_a, n,  n,   n    );
       `RV2ISA_INST_BEQ     :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_BLt     :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_BLT     :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BLTU    :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BGE     :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BGEU    :cs( y, br_na,  imm_x, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );

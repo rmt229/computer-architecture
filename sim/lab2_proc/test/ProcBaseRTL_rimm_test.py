@@ -17,7 +17,13 @@ import inst_addi
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_addi.gen_basic_test     ) ,
-
+  asm_test(inst_addi.gen_dest_dep_test),
+  asm_test(inst_addi.gen_src0_dep_test),
+  asm_test(inst_addi.gen_src1_dep_test),
+  asm_test(inst_addi.gen_srcs_dep_test),
+  asm_test(inst_addi.gen_srcs_dest_test),
+  asm_test(inst_addi.gen_value_test),
+  asm_test(inst_addi.gen_random_test),
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
   # scenarios.
