@@ -272,16 +272,16 @@ module lab2_proc_ProcBaseDpathVRTL
 
   assign dmemreq_msg_addr = alu_result_X;
 
-  lab1_imul_IntMulAltVRTL mul
-  (
-    .clk      (clk),
-    .reset    (reset),
-    .req_val  (), // TODO: stall signal
-    .req_rdy  (),
-    .resp_val (),
-    .resp_rdy (),
-    .resp_msg ()
-  );
+  // lab1_imul_IntMulAltVRTL mul
+  // (
+  //   .clk      (clk),
+  //   .reset    (reset),
+  //   .req_val  (), // TODO: stall signal
+  //   .req_rdy  (),
+  //   .resp_val (),
+  //   .resp_rdy (),
+  //   .resp_msg ()
+  // );
 
   //--------------------------------------------------------------------
   // M stage
