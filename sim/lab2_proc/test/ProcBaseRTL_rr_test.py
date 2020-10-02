@@ -215,6 +215,7 @@ import inst_srl
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_srl.gen_basic_test     ) ,
+  asm_test( inst_srl.gen_dest_dep_test  ),
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
@@ -223,7 +224,7 @@ import inst_srl
 ])
 def test_srl( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
-
+  asm_test( inst_sll.gen_dest_dep_test  ) ,
 # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # random stall and delay
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -235,6 +236,7 @@ import inst_sll
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sll.gen_basic_test     ) ,
+  asm_test( inst_sll.gen_dest_dep_test  ),
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
