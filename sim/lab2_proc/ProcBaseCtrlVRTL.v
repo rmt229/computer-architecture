@@ -382,7 +382,7 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_SRAI    :cs( y, br_na,  imm_i, y, bm_imm, y, alu_sra, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_SRLI    :cs( y, br_na,  imm_i, y, bm_imm, n, alu_srl, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_SLLI    :cs( y, br_na,  imm_i, y, bm_imm, n, alu_sll, nr, wm_a, y,  n,   n    );
-      `RV2ISA_INST_LUI     :cs( y, br_na,  imm_u, n, bm_imm, y, alu_cp1, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_LUI     :cs( y, br_na,  imm_u, n, bm_imm, n, alu_cp1, nr, wm_a, y,  n,   n    );
       // `RV2ISA_INST_AUIPC   :cs( y, br_na,  imm_u, y, bm_imm, y, alu_add, nr, wm_m, y,  n,   n    );
       `RV2ISA_INST_LW      :cs( y, br_na,  imm_i, y, bm_imm, n, alu_add, ld, wm_m, y,  n,   n    );
       `RV2ISA_INST_SW      :cs( y, br_na,  imm_s, y, bm_imm, y, alu_add, nr, wm_a, y,  n,   n    );
