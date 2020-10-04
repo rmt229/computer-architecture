@@ -28,6 +28,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   output logic        dmemreq_val,
   input  logic        dmemreq_rdy,
+  output logic        mem_wen,
 
   input  logic        dmemresp_val,
   output logic        dmemresp_rdy,
@@ -385,7 +386,7 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_LUI     :cs( y, br_na,  imm_u, n, bm_imm, n, alu_cp1, nr, wm_a, y,  n,   n    );
       // `RV2ISA_INST_AUIPC   :cs( y, br_na,  imm_u, y, bm_imm, y, alu_add, nr, wm_m, y,  n,   n    );
       `RV2ISA_INST_LW      :cs( y, br_na,  imm_i, y, bm_imm, n, alu_add, ld, wm_m, y,  n,   n    );
-      `RV2ISA_INST_SW      :cs( y, br_na,  imm_s, y, bm_imm, y, alu_add, nr, wm_a, y,  n,   n    );
+      `RV2ISA_INST_SW      :cs( y, br_na,  imm_s, y, bm_imm, y, alu_add, st, wm_x, n,  n,   n    );
       `RV2ISA_INST_JAL     :cs( y, br_na,  imm_j, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_JALR    :cs( y, br_na,  imm_j, y, bm_rf,  y, alu_sub, nr, wm_a, y,  n,   n    );
       `RV2ISA_INST_BNE     :cs( y, br_bne, imm_b, y, bm_rf,  y, alu_x,   nr, wm_a, n,  n,   n    );
@@ -519,6 +520,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   logic        proc2mngr_val_X;
   logic        stats_en_wen_X;
   logic [2:0]  br_type_X;
+  logic        r_w;
 
   // Pipeline registers
 
@@ -538,6 +540,12 @@ module lab2_proc_ProcBaseCtrlVRTL
       stats_en_wen_X  <= stats_en_wen_D;
       br_type_X       <= br_type_D;
     end
+  
+  always_comb begin
+    r_w = dmemreq_type_X == st;
+  end
+
+  assign mem_wen = r_w;
 
   // branch logic, redirect PC in F if branch is taken
 

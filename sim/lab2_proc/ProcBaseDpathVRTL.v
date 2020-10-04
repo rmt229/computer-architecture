@@ -33,6 +33,7 @@ module lab2_proc_ProcBaseDpathVRTL
   // Data Memory Port
 
   output logic [31:0] dmemreq_msg_addr,
+  output logic [31:0] dmemreq_msg_data,
   input  logic [31:0] dmemresp_msg_data,
 
   // mngr communication ports
@@ -260,6 +261,19 @@ module lab2_proc_ProcBaseDpathVRTL
     .d      (jal_target_D),
     .q      (br_target_X)
   );
+
+  logic [31:0] dmemreq_msg_data_reg_X_out;
+  
+  vc_EnResetReg #(32, 0) dmem_write_data_reg_X
+  (
+    .clk    (clk),
+    .reset  (reset),
+    .en     (reg_en_X),
+    .d      (rf_rdata1_D),
+    .q      (dmemreq_msg_data_reg_X_out)
+  );
+  
+  assign dmemreq_msg_data = dmemreq_msg_data_reg_X_out;
 
   logic [31:0] alu_result_X;
   logic [31:0] ex_result_X;
