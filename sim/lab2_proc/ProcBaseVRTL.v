@@ -118,6 +118,7 @@ module lab2_proc_ProcBaseVRTL
   logic [1:0]  pc_sel_F;
 
   logic        reg_en_D;
+  logic        op1_sel_D;
   logic [1:0]  op2_sel_D;
   logic [1:0]  csrr_sel_D;
   logic [2:0]  imm_type_D;
@@ -224,6 +225,7 @@ module lab2_proc_ProcBaseVRTL
     .pc_sel_F               (pc_sel_F),
 
     .reg_en_D               (reg_en_D),
+    .op1_sel_D              (op1_sel_D),
     .op2_sel_D              (op2_sel_D),
     .csrr_sel_D             (csrr_sel_D),
     .imm_type_D             (imm_type_D),
@@ -354,6 +356,7 @@ module lab2_proc_ProcBaseVRTL
     .pc_sel_F                (pc_sel_F),
 
     .reg_en_D                (reg_en_D),
+    .op1_sel_D               (op1_sel_D),
     .op2_sel_D               (op2_sel_D),
     .csrr_sel_D              (csrr_sel_D),
     .imm_type_D              (imm_type_D),
