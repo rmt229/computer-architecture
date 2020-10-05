@@ -42,3 +42,28 @@ def gen_basic_test():
 # ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # Define additional directed and random test cases.
 # '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+def gen_mid_dep_test():
+  return [
+
+    gen_sw_mid_dep_test( 5, 0x2000, 0x00010203 ), 
+    gen_sw_mid_dep_test( 4, 0x2004, 0x04050607 ), 
+    gen_sw_mid_dep_test( 3, 0x2008, 0x08090a0b ), 
+    gen_sw_mid_dep_test( 2, 0x200c, 0x0c0d0e0f ), 
+    gen_sw_mid_dep_test( 1, 0x2010, 0x10111213 ), 
+    gen_sw_mid_dep_test( 0, 0x2014, 0x14151617 ), 
+
+  ]
+
+def gen_base_dep_test():
+  return [
+
+    gen_sw_base_dep_test( 5, 0x2000, 0x00010203 ), 
+    gen_sw_base_dep_test( 4, 0x2004, 0x04050607 ), 
+    gen_sw_base_dep_test( 3, 0x2008, 0x08090a0b ), 
+    gen_sw_base_dep_test( 2, 0x200c, 0x0c0d0e0f ), 
+    gen_sw_base_dep_test( 1, 0x2010, 0x10111213 ), 
+    gen_sw_base_dep_test( 0, 0x2014, 0x14151617 ), 
+
+  ]
+  

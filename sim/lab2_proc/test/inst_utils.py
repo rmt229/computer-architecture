@@ -574,6 +574,52 @@ def gen_ld_value_test( inst, offset, base, result ):
 
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+#-------------------------------------------------------------------------
+# gen_sw_template
+#-------------------------------------------------------------------------
+
+def gen_sw_template(
+  num_nops_base, num_nops_mid, num_nops_dest,
+  reg_base, base, result
+):
+  return """
+
+    # Move base value into register
+    csrr {reg_base}, mngr2proc < {base}
+    csrr x3, mngr2proc < {result}
+    
+    {nops_base}
+
+    # Instruction under test
+    sw x3, 0({reg_base})
+    
+    {nops_mid}
+
+    lw x4, 0({reg_base})
+
+    {nops_dest}
+
+    # Check the result
+    csrw proc2mngr, x4 > {result}
+
+  """.format(
+    nops_base = gen_nops(num_nops_base),
+    nops_mid = gen_nops(num_nops_mid),
+    nops_dest = gen_nops(num_nops_dest),
+    **locals()
+  )
+
+def gen_sw_mid_dep_test(num_nops, base, result):
+  return gen_sw_template(8, num_nops, 8, "x1", base, result)
+
+
+def gen_sw_base_dep_test(num_nops, base, result):
+  return gen_sw_template(num_nops, 8, 8, "x1", base, result)
+
+# TODO: add more kinds of sw tests? 
+
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
 #=========================================================================
 # TestHarness
 #=========================================================================
