@@ -17,6 +17,8 @@ import inst_jal
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_jal.gen_basic_test        ) ,
+  asm_test( inst_jal.gen_dest_dep_test     ) ,
+  asm_test( inst_jal.gen_base_dep_test     ) ,
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
@@ -34,6 +36,8 @@ import inst_jalr
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_jalr.gen_basic_test    ),
+  asm_test( inst_jalr.gen_dest_dep_test ) ,
+  asm_test( inst_jalr.gen_base_dep_test ) ,
 
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated

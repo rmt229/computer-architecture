@@ -55,3 +55,21 @@ def gen_basic_test():
 # ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # Define additional directed and random test cases.
 # '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+def gen_dest_dep_test():
+
+  return [
+
+    gen_jalr_dest_dep_test(5, "0x00000230")
+    # TODO: why two or more tests in this array will crash? 
+
+  ]
+
+def gen_base_dep_test():
+
+  return [
+
+    gen_jalr_base_dep_test(5, "0x00000224")
+    # TODO: why two or more tests in this array will crash? 
+
+  ]

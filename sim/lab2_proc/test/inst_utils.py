@@ -620,6 +620,91 @@ def gen_sw_base_dep_test(num_nops, base, result):
 
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+#-------------------------------------------------------------------------
+# gen_jal_template
+#-------------------------------------------------------------------------
+
+def gen_jal_template( num_nops_base, num_nops_dest, result ):
+  
+  return """
+
+    # Use r3 to track the control flow pattern
+    addi  x3, x0, 0     # 0x0200
+    
+    {nops_base}
+
+    jal   x1, label_a
+    addi  x3, x3, 0b01
+
+    {nops_dest}
+
+  label_a:
+    addi  x3, x3, 0b10
+
+    # Check the link address
+    csrw  proc2mngr, x1 > {result} 
+
+    # Only the second bit should be set if jump was taken
+    csrw  proc2mngr, x3 > 0b10
+
+  """.format(
+    nops_base = gen_nops(num_nops_base),
+    nops_dest = gen_nops(num_nops_dest),
+    **locals()
+  )
+
+def gen_jal_dest_dep_test(num_nops, result):
+  return gen_jal_template(8, num_nops, result)
+
+def gen_jal_base_dep_test(num_nops, result):
+  return gen_jal_template(num_nops, 8, result)
+
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+#-------------------------------------------------------------------------
+# gen_jalr_template
+#-------------------------------------------------------------------------
+
+def gen_jalr_template( num_nops_base, num_nops_dest, result ):
+  
+  return """
+
+    # Use r3 to track the control flow pattern
+    addi  x3, x0, 0           # 0x0200
+                              #
+    lui x1,      %hi[label_a] # 0x0204
+    addi x1, x1, %lo[label_a] # 0x0208
+
+    {nops_base}
+    
+    jalr  x31, x1, 0          # 0x022c
+    addi  x3, x3, 0b01        # 0x0230
+
+    {nops_dest}
+
+  label_a:
+    addi  x3, x3, 0b10
+
+    # Check the link address
+    csrw  proc2mngr, x31 > {result}
+
+    # Only the second bit should be set if jump was taken
+    csrw  proc2mngr, x3  > 0b10
+
+  """.format(
+    nops_base = gen_nops(num_nops_base),
+    nops_dest = gen_nops(num_nops_dest),
+    **locals()
+  )
+
+def gen_jalr_dest_dep_test(num_nops, result):
+  return gen_jalr_template(8, num_nops, result)
+
+def gen_jalr_base_dep_test(num_nops, result):
+  return gen_jalr_template(num_nops, 8, result)
+
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
 #=========================================================================
 # TestHarness
 #=========================================================================
