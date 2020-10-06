@@ -126,6 +126,7 @@ module lab2_proc_ProcBaseVRTL
 
   logic        imul_resp_rdy_X; 
   logic        reg_en_X;
+  logic [1:0]  ex_result_sel_X;
   logic [3:0]  alu_fn_X;
   logic        mem_wen;
 
@@ -232,6 +233,7 @@ module lab2_proc_ProcBaseVRTL
     .imul_req_val_D         (imul_req_val_D),
 
     .reg_en_X               (reg_en_X),
+    .ex_result_sel_X        (ex_result_sel_X),
     .alu_fn_X               (alu_fn_X),
     .imul_resp_rdy_X        (imul_resp_rdy_X),
     .mem_wen                (mem_wen),
@@ -363,6 +365,7 @@ module lab2_proc_ProcBaseVRTL
     .imul_req_val_D          (imul_req_val_D),
 
     .reg_en_X                (reg_en_X),
+    .ex_result_sel_X         (ex_result_sel_X),
     .alu_fn_X                (alu_fn_X),
     .imul_resp_rdy_X         (imul_resp_rdy_X),
 
