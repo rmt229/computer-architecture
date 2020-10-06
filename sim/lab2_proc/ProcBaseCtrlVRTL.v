@@ -72,7 +72,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   input  logic        imul_resp_val_X, // TODO: Thought would be useful 
   input  logic        br_cond_eq_X,
-  input  logic        br_cond_lt_X,    // TODO: Thought would be useful 
+  input  logic        br_cond_lt_X,    
   input  logic        br_cond_ltu_X,    
 
   output logic        stats_en_wen_W,
@@ -264,10 +264,10 @@ module lab2_proc_ProcBaseCtrlVRTL
   localparam br_na    = 3'b0; // No branch
   localparam br_bne   = 3'b1; // bne
   localparam br_beq   = 3'd2; // beq TODO: Thought would be useful
-  localparam br_blt    = 3'd3; // blt
-  localparam br_bltu   = 3'd4; // bltu
-  localparam br_bge    = 3'd5; // bge
-  localparam br_bgeu   = 3'd6; // bgeu
+  localparam br_blt   = 3'd3; // blt
+  localparam br_bltu  = 3'd4; // bltu
+  localparam br_bge   = 3'd5; // bge
+  localparam br_bgeu  = 3'd6; // bgeu
 
   // Operand 1 Mux Select
   localparam am_x     = 1'bx; // Don't care
@@ -418,10 +418,10 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_JALR    :cs( y, jalr,br_na,  imm_i, am_rf, y, bm_imm, n, alu_aaa, em_p, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_BNE     :cs( y, j_n, br_bne, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
       `RV2ISA_INST_BEQ     :cs( y, j_n, br_beq, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BLT     :cs( y, j_n, br_blt, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BLTU    :cs( y, j_n, br_bltu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BGE     :cs( y, j_n, br_bge, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BGEU    :cs( y, j_n, br_bgeu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BLT     :cs( y, j_n, br_blt, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BLTU    :cs( y, j_n, br_bltu,imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BGE     :cs( y, j_n, br_bge, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BGEU    :cs( y, j_n, br_bgeu,imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
       `RV2ISA_INST_CSRR    :cs( y, j_n, br_na,  imm_i, am_rf, n, bm_csr, n, alu_cp1, em_a, nr, wm_r, y,  y,   n    );
       `RV2ISA_INST_CSRW    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_rf,  n, alu_cp0, em_a, nr, wm_r, n,  n,   y    );
 
@@ -588,17 +588,17 @@ module lab2_proc_ProcBaseCtrlVRTL
     end else if ( val_X && ( br_type_X == br_beq ) ) begin // TODO: Should add here 
       pc_redirect_X = br_cond_eq_X;
       pc_sel_X      = 2'b1;          // use branch target
-    end else if ( val_X && ( br_type_X == br_blt ) ) begin // TODO: to complete 
-      pc_redirect_X = !br_cond_eq_X;
+    end else if ( val_X && ( br_type_X == br_blt ) ) begin 
+      pc_redirect_X = br_cond_lt_X;
       pc_sel_X      = 2'b1;          // use branch target
     end else if ( val_X && ( br_type_X == br_bltu ) ) begin
-      pc_redirect_X = !br_cond_eq_X;
+      pc_redirect_X = br_cond_ltu_X;
       pc_sel_X      = 2'b1;          // use branch target
     end else if ( val_X && ( br_type_X == br_bge ) ) begin
-      pc_redirect_X = !br_cond_eq_X;
+      pc_redirect_X = !br_cond_eq_X && !br_cond_lt_X;
       pc_sel_X      = 2'b1;          // use branch target
     end else if ( val_X && ( br_type_X == br_bgeu ) ) begin
-      pc_redirect_X = !br_cond_eq_X;
+      pc_redirect_X = !br_cond_eq_X && !br_cond_ltu_X;
       pc_sel_X      = 2'b1;          // use branch target
     end else begin
       pc_redirect_X = 1'b0;
