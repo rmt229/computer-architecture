@@ -102,10 +102,10 @@ def gen_basic_test():
   """
 
 #-------------------------------------------------------------------------
-# gen_src0_dep_taken_test
+# gen_src0_dep_nottaken_test
 #-------------------------------------------------------------------------
 
-def gen_src0_dep_taken_test():
+def gen_src0_dep_nottaken_test():
   return [
     gen_br2_src0_dep_test( 5, "beq", 1, 7, False ),
     gen_br2_src0_dep_test( 4, "beq", 2, 7, False ),
@@ -116,10 +116,10 @@ def gen_src0_dep_taken_test():
   ]
 
 #-------------------------------------------------------------------------
-# gen_src0_dep_nottaken_test
+# gen_src0_dep_taken_test
 #-------------------------------------------------------------------------
 
-def gen_src0_dep_nottaken_test():
+def gen_src0_dep_taken_test():
   return [
     gen_br2_src0_dep_test( 5, "beq", 1, 1, True ),
     gen_br2_src0_dep_test( 4, "beq", 2, 2, True ),
@@ -129,11 +129,12 @@ def gen_src0_dep_nottaken_test():
     gen_br2_src0_dep_test( 0, "beq", 6, 6, True ),
   ]
 
+
 #-------------------------------------------------------------------------
-# gen_src1_dep_taken_test
+# gen_src1_dep_nottaken_test
 #-------------------------------------------------------------------------
 
-def gen_src1_dep_taken_test():
+def gen_src1_dep_nottaken_test():
   return [
     gen_br2_src1_dep_test( 5, "beq", 7, 1, False ),
     gen_br2_src1_dep_test( 4, "beq", 7, 2, False ),
@@ -144,10 +145,10 @@ def gen_src1_dep_taken_test():
   ]
 
 #-------------------------------------------------------------------------
-# gen_src1_dep_nottaken_test
+# gen_src1_dep_taken_test
 #-------------------------------------------------------------------------
 
-def gen_src1_dep_nottaken_test():
+def gen_src1_dep_taken_test():
   return [
     gen_br2_src1_dep_test( 5, "beq", 1, 1, True ),
     gen_br2_src1_dep_test( 4, "beq", 2, 2, True ),
@@ -158,10 +159,10 @@ def gen_src1_dep_nottaken_test():
   ]
 
 #-------------------------------------------------------------------------
-# gen_srcs_dep_taken_test
+# gen_srcs_dep_nottaken_test
 #-------------------------------------------------------------------------
 
-def gen_srcs_dep_taken_test():
+def gen_srcs_dep_nottaken_test():
   return [
     gen_br2_srcs_dep_test( 5, "beq", 1, 2, False ),
     gen_br2_srcs_dep_test( 4, "beq", 2, 3, False ),
@@ -172,10 +173,10 @@ def gen_srcs_dep_taken_test():
   ]
 
 #-------------------------------------------------------------------------
-# gen_srcs_dep_nottaken_test
+# gen_srcs_dep_taken_test
 #-------------------------------------------------------------------------
 
-def gen_srcs_dep_nottaken_test():
+def gen_srcs_dep_taken_test():
   return [
     gen_br2_srcs_dep_test( 5, "beq", 1, 1, True ),
     gen_br2_srcs_dep_test( 4, "beq", 2, 2, True ),
@@ -186,7 +187,7 @@ def gen_srcs_dep_nottaken_test():
   ]
 
 #-------------------------------------------------------------------------
-# gen_src0_eq_src1_nottaken_test
+# gen_src0_eq_src1_taken_test
 #-------------------------------------------------------------------------
 
 def gen_src0_eq_src1_test():
@@ -229,8 +230,8 @@ def gen_random_test():
   for i in xrange(25):
     taken = random.choice([True, False])
     src0  = Bits( 32, random.randint(0,0xffffffff) )
-    if taken:
-      # Branch taken, operands are unequal
+    if not taken:
+      # Branch not taken, operands are unequal
       src1 = Bits( 32, random.randint(0,0xffffffff) )
       # Rare case, but could happen
       if src0 == src1:

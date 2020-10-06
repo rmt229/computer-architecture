@@ -585,6 +585,21 @@ module lab2_proc_ProcBaseCtrlVRTL
     end else if ( val_X && ( br_type_X == br_bne ) ) begin
       pc_redirect_X = !br_cond_eq_X;
       pc_sel_X      = 2'b1;          // use branch target
+    end else if ( val_X && ( br_type_X == br_beq ) ) begin // TODO: Should add here 
+      pc_redirect_X = br_cond_eq_X;
+      pc_sel_X      = 2'b1;          // use branch target
+    end else if ( val_X && ( br_type_X == br_blt ) ) begin // TODO: to complete 
+      pc_redirect_X = !br_cond_eq_X;
+      pc_sel_X      = 2'b1;          // use branch target
+    end else if ( val_X && ( br_type_X == br_bltu ) ) begin
+      pc_redirect_X = !br_cond_eq_X;
+      pc_sel_X      = 2'b1;          // use branch target
+    end else if ( val_X && ( br_type_X == br_bge ) ) begin
+      pc_redirect_X = !br_cond_eq_X;
+      pc_sel_X      = 2'b1;          // use branch target
+    end else if ( val_X && ( br_type_X == br_bgeu ) ) begin
+      pc_redirect_X = !br_cond_eq_X;
+      pc_sel_X      = 2'b1;          // use branch target
     end else begin
       pc_redirect_X = 1'b0;
       pc_sel_X      = 2'b0;          // use pc+4
