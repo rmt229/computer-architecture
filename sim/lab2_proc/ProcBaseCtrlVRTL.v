@@ -252,11 +252,11 @@ module lab2_proc_ProcBaseCtrlVRTL
   localparam n = 1'd0;
   localparam y = 1'd1;
 
-  // Register specifiers
+  // Jump type
 
-  localparam rx = 5'bx;   // don't care
-  localparam r0 = 5'd0;   // zero
-  localparam rL = 5'd31;  // for jal
+  localparam j_n  = 2'd0; // don't jump
+  localparam jal  = 2'd1; // jal
+  localparam jalr = 2'd2; // jalr
 
   // Branch type
 
@@ -297,6 +297,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   localparam alu_sll  = 4'd10;
   localparam alu_cp0  = 4'd11;
   localparam alu_cp1  = 4'd12;
+  localparam alu_aaa  = 4'd13;
 
   // Immediate Type
   localparam imm_x    = 3'bx;
@@ -328,7 +329,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   // Instruction Decode
 
   logic       inst_val_D;
-  logic       j_type_D;
+  logic [1:0] j_type_D;
   logic [2:0] br_type_D;
   logic       rs1_en_D;
   logic       rs2_en_D;
@@ -346,7 +347,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   task cs
   (
     input logic       cs_inst_val,
-    input logic       cs_j_type,
+    input logic [1:0] cs_j_type,
     input logic [2:0] cs_br_type,
     input logic [2:0] cs_imm_type,
     input logic       cs_op1_sel,
@@ -386,60 +387,55 @@ module lab2_proc_ProcBaseCtrlVRTL
 
     casez ( inst_D )
 
-      //                           jump br    imm    op1    rs1 op2    rs2 alu     exmux dmm wbmux rf
-      //                       val type type  type   muxsel en  muxsel en  fn      sel   typ sel   wen csrr csrw
-      `RV2ISA_INST_NOP     :cs( y, n, br_na,  imm_x, am_rf, n, bm_x,   n, alu_x,   em_x, nr, wm_r, n,  n,   n    );
-      `RV2ISA_INST_ADD     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_add, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SUB     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sub, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_MUL     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_mul, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_AND     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_and, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_OR      :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_or,  em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_XOR     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_xor, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLT     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_slt, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLTU    :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sltu,em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SRA     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sra, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SRL     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_srl, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLL     :cs( y, n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sll, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_ADDI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_add, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_ORI     :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_or,  em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_ANDI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_and, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_XORI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_xor, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLTI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLTIU   :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SRAI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, y, alu_sra, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SRLI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_srl, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLLI    :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_sll, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_LUI     :cs( y, n, br_na,  imm_u, am_rf, n, bm_imm, n, alu_cp1, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_AUIPC   :cs( y, n, br_na,  imm_u, am_pc, y, bm_imm, y, alu_add, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_LW      :cs( y, n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_add, em_x, ld, wm_m, y,  n,   n    );
-      `RV2ISA_INST_SW      :cs( y, n, br_na,  imm_s, am_rf, y, bm_imm, y, alu_add, em_x, st, wm_x, n,  n,   n    );
-      `RV2ISA_INST_JAL     :cs( y, y, br_na,  imm_j, am_x,  n, bm_x,   n, alu_x,   em_p, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_JALR    :cs( y, n, br_na,  imm_j, am_rf, y, bm_rf,  y, alu_sub, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_BNE     :cs( y, n, br_bne, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BEQ     :cs( y, n, br_beq, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BLT     :cs( y, n, br_blt, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BLTU    :cs( y, n, br_bltu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BGE     :cs( y, n, br_bge, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_BGEU    :cs( y, n, br_bgeu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
-      `RV2ISA_INST_CSRR    :cs( y, n, br_na,  imm_i, am_rf, n, bm_csr, n, alu_cp1, em_a, nr, wm_r, y,  y,   n    );
-      `RV2ISA_INST_CSRW    :cs( y, n, br_na,  imm_i, am_rf, y, bm_rf,  n, alu_cp0, em_a, nr, wm_r, n,  n,   y    );
+      //                           jump br      imm    op1    rs1 op2    rs2 alu     exmux dmm wbmux rf
+      //                       val type type    type   muxsel en  muxsel en  fn      sel   typ sel   wen csrr csrw
+      `RV2ISA_INST_NOP     :cs( y, j_n, br_na,  imm_x, am_rf, n, bm_x,   n, alu_x,   em_x, nr, wm_r, n,  n,   n    );
+      `RV2ISA_INST_ADD     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_add, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SUB     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sub, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_MUL     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_mul, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_AND     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_and, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_OR      :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_or,  em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_XOR     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_xor, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLT     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_slt, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLTU    :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sltu,em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SRA     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sra, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SRL     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_srl, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLL     :cs( y, j_n, br_na,  imm_x, am_rf, y, bm_rf,  y, alu_sll, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_ADDI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_add, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_ORI     :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_or,  em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_ANDI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_and, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_XORI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_xor, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLTI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLTIU   :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SRAI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, y, alu_sra, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SRLI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_srl, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLLI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_sll, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_LUI     :cs( y, j_n, br_na,  imm_u, am_rf, n, bm_imm, n, alu_cp1, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_AUIPC   :cs( y, j_n, br_na,  imm_u, am_pc, y, bm_imm, y, alu_add, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_LW      :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_add, em_x, ld, wm_m, y,  n,   n    );
+      `RV2ISA_INST_SW      :cs( y, j_n, br_na,  imm_s, am_rf, y, bm_imm, y, alu_add, em_x, st, wm_x, n,  n,   n    );
+      `RV2ISA_INST_JAL     :cs( y, jal, br_na,  imm_j, am_x,  n, bm_x,   n, alu_x,   em_p, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_JALR    :cs( y, jalr,br_na,  imm_i, am_rf, y, bm_imm, n, alu_aaa, em_p, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_BNE     :cs( y, j_n, br_bne, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BEQ     :cs( y, j_n, br_beq, imm_b, am_rf, y, bm_rf,  y, alu_x,   em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BLT     :cs( y, j_n, br_blt, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BLTU    :cs( y, j_n, br_bltu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BGE     :cs( y, j_n, br_bge, imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_BGEU    :cs( y, j_n, br_bgeu,imm_b, am_rf, y, bm_rf,  y, alu_sub, em_x, nr, wm_x, n,  n,   n    );
+      `RV2ISA_INST_CSRR    :cs( y, j_n, br_na,  imm_i, am_rf, n, bm_csr, n, alu_cp1, em_a, nr, wm_r, y,  y,   n    );
+      `RV2ISA_INST_CSRW    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_rf,  n, alu_cp0, em_a, nr, wm_r, n,  n,   y    );
 
       //''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''
       // Add more instructions to the control signal table
       //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-      default              :cs( n, n, br_x,   imm_x, am_x,  n, bm_x,   n, alu_x,  em_x, nr, wm_x, n,  n,   n    );
+      default              :cs( n, j_n, br_x,   imm_x, am_x,  n, bm_x,   n, alu_x,  em_x, nr, wm_x, n,  n,   n    );
 
     endcase
   end // always_comb
 
-  assign pc_redirect_D = j_type_D;
-
-  always_comb begin
-    if ( j_type_D ) begin
-      pc_sel_D = 2'd2;
-    end
-  end
+  assign pc_redirect_D = j_type_D ==  2'd1;          // when jal
+  assign pc_sel_D = j_type_D ==  2'd1 ? 2'd2 : 2'd0; // when jal
 
   logic [4:0] rf_waddr_D;
   assign rf_waddr_D = inst_rd_D;
@@ -526,7 +522,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // osquash due to jump instruction in D stage
 
-  assign osquash_D = j_type_D;
+  assign osquash_D = j_type_D == 2'd1; // when jal
 
   // stall and squash in D
 
@@ -555,6 +551,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   logic        stats_en_wen_X;
   logic [2:0]  br_type_X;
   logic        r_w;
+  logic [1:0]  j_type_X;
 
   // Pipeline registers
 
@@ -574,6 +571,7 @@ module lab2_proc_ProcBaseCtrlVRTL
       stats_en_wen_X  <= stats_en_wen_D;
       br_type_X       <= br_type_D;
       ex_result_sel_X <= ex_result_sel_D;
+      j_type_X        <= j_type_D;
     end
   
   assign mem_wen = dmemreq_type_X == st;
@@ -581,7 +579,10 @@ module lab2_proc_ProcBaseCtrlVRTL
   // branch logic, redirect PC in F if branch is taken
 
   always_comb begin
-    if ( val_X && ( br_type_X == br_bne ) ) begin
+    if (j_type_X == 2'd2) begin // when jalr
+      pc_redirect_X = 1;
+      pc_sel_X      = 2'd3;     // use jalr target
+    end else if ( val_X && ( br_type_X == br_bne ) ) begin
       pc_redirect_X = !br_cond_eq_X;
       pc_sel_X      = 2'b1;          // use branch target
     end else begin

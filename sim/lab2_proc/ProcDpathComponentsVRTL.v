@@ -80,6 +80,7 @@ module lab2_proc_AluVRTL
       4'd10   : out = in0 << in1;                                      // SLL
       4'd11   : out = in0;                                             // CP OP0
       4'd12   : out = in1;                                             // CP OP1
+      4'd13   : out = (in0 + in1) & 32'hfffffffe;                      // jalr
 
       //''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''
       // Add more alu function
