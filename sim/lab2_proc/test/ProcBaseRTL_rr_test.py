@@ -67,10 +67,10 @@ import inst_mul
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_mul.gen_basic_test     ) ,
   asm_test( inst_mul.gen_dest_dep_test  ) ,
-  asm_test(inst_mul.gen_src0_dep_test),
-  asm_test(inst_mul.gen_src1_dep_test),
-  asm_test(inst_mul.gen_srcs_dep_test),
-  asm_test(inst_mul.gen_srcs_dest_test),
+  asm_test( inst_mul.gen_src0_dep_test  ) ,
+  asm_test( inst_mul.gen_src1_dep_test  ) ,
+  asm_test( inst_mul.gen_srcs_dep_test  ) ,
+  asm_test( inst_mul.gen_srcs_dest_test ) ,
   # asm_test( inst_mul.gen_value_test     ) ,
   # asm_test( inst_mul.gen_random_test    ) ,
 
