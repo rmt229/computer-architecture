@@ -104,8 +104,8 @@ import inst_blt
   asm_test( inst_blt.gen_srcs_dep_taken_test    ),
   asm_test( inst_blt.gen_srcs_dep_nottaken_test ),
   asm_test( inst_blt.gen_src0_eq_src1_test      ),
-  # asm_test( inst_blt.gen_value_test             ),
-  # asm_test( inst_blt.gen_random_test            ),
+  asm_test( inst_blt.gen_value_test             ),
+  asm_test( inst_blt.gen_random_test            ),
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated
   # scenarios.
@@ -129,7 +129,7 @@ import inst_bltu
   asm_test( inst_bltu.gen_srcs_dep_taken_test    ),
   asm_test( inst_bltu.gen_srcs_dep_nottaken_test ),
   asm_test( inst_bltu.gen_src0_eq_src1_test      ),
-  # asm_test( inst_bltu.gen_value_test             ),
+  asm_test( inst_bltu.gen_value_test             ),
   asm_test( inst_bltu.gen_random_test            ),
   # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # Add more rows to the test case table to test more complicated

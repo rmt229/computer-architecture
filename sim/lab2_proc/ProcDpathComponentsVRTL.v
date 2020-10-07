@@ -103,16 +103,8 @@ module lab2_proc_AluVRTL
   //''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''
   // Add more alu function
   //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-  // Calculate lt, zero, negative flags
-
-  // vc_LtComparator #(32) cond_lt_comp
-  // (
-  //   .in0  ($signed(in0)),
-  //   .in1  ($signed(in1)),
-  //   .out  (ops_lt)
-  // );
-assign opts_lt = $signed(in0) < $signed(in1); 
+  logic [32:0] diff = {{1{in0[31]}}, in0[31:0]} - {{1{in1[31]}}, in1[31:0]}; 
+  assign ops_lt = diff[32]; 
 
   // Calculate ltu, zero, negative flags
 

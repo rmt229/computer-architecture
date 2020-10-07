@@ -154,21 +154,21 @@ def gen_value_test():
   return [
 
     gen_br2_value_test( "bltu", -1, -1, False ),
-    gen_br2_value_test( "bltu", -1,  0, True  ),
-    gen_br2_value_test( "bltu", -1,  1, True  ),
+    gen_br2_value_test( "bltu", -1,  0, False  ),
+    gen_br2_value_test( "bltu", -1,  1, False  ),
 
-    gen_br2_value_test( "bltu",  0, -1, False ),
+    gen_br2_value_test( "bltu",  0, -1, True ),
     gen_br2_value_test( "bltu",  0,  0, False ),
     gen_br2_value_test( "bltu",  0,  1, True  ),
 
-    gen_br2_value_test( "bltu",  1, -1, False ),
+    gen_br2_value_test( "bltu",  1, -1, True ),
     gen_br2_value_test( "bltu",  1,  0, False ),
     gen_br2_value_test( "bltu",  1,  1, False ),
 
-    # gen_br2_value_test( "bltu", 0xfffffff7, 0xfffffff7, False ),
-    # gen_br2_value_test( "bltu", 0x7fffffff, 0x7fffffff, False ),
-    # gen_br2_value_test( "bltu", 0xfffffff7, 0x7fffffff, False ),
-    # gen_br2_value_test( "bltu", 0x7fffffff, 0xfffffff7, True  ),
+    gen_br2_value_test( "bltu", 0xfffffff7, 0xfffffff7, False ),
+    gen_br2_value_test( "bltu", 0x7fffffff, 0x7fffffff, False ),
+    gen_br2_value_test( "bltu", 0xfffffff7, 0x7fffffff, False ),
+    gen_br2_value_test( "bltu", 0x7fffffff, 0xfffffff7, True  ),
 
   ]
 

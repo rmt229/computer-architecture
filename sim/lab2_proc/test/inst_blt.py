@@ -152,7 +152,6 @@ def gen_src0_eq_src1_test():
 
 def gen_value_test():
   return [
-
     gen_br2_value_test( "blt", -1, -1, False ),
     gen_br2_value_test( "blt", -1,  0, True  ),
     gen_br2_value_test( "blt", -1,  1, True  ),
@@ -163,12 +162,12 @@ def gen_value_test():
 
     gen_br2_value_test( "blt",  1, -1, False ),
     gen_br2_value_test( "blt",  1,  0, False ),
-    # gen_br2_value_test( "blt",  1,  1, False ),
+    gen_br2_value_test( "blt",  1,  1, False ),
 
-    # gen_br2_value_test( "blt", 0xfffffff7, 0xfffffff7, False ),
-    # gen_br2_value_test( "blt", 0x7fffffff, 0x7fffffff, False ),
-    # gen_br2_value_test( "blt", 0xfffffff7, 0x7fffffff, False ),
-    # gen_br2_value_test( "blt", 0x7fffffff, 0xfffffff7, True  ),
+    gen_br2_value_test( "blt", 0xfffffff7, 0xfffffff7, False ),
+    gen_br2_value_test( "blt", 0x7fffffff, 0x7fffffff, False ),
+    gen_br2_value_test( "blt", 0xfffffff7, 0x7fffffff, True  ),
+    gen_br2_value_test( "blt", 0x7fffffff, 0xfffffff7, False ),
 
   ]
 
@@ -184,7 +183,7 @@ def gen_random_test():
     if taken:
       # Branch taken, op1 < op2
       src1 = Bits( 32, random.randint(0,0xffffffff) )
-      if src0 >= src1:
+      if src0.int() >= src1.int():
         src1 = src0 + 1
     else:
       # Branch not taken, op1 >= op2
