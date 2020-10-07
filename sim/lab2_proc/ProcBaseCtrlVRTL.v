@@ -571,6 +571,7 @@ module lab2_proc_ProcBaseCtrlVRTL
       stats_en_wen_X  <= stats_en_wen_D;
       br_type_X       <= br_type_D;
       ex_result_sel_X <= ex_result_sel_D;
+      // imul_resp_rdy_X <= 
       j_type_X        <= j_type_D;
     end
   

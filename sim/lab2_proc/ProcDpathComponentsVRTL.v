@@ -104,6 +104,24 @@ module lab2_proc_AluVRTL
   // Add more alu function
   //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+  // Calculate lt, zero, negative flags
+
+  // vc_LtComparator #(32) cond_lt_comp
+  // (
+  //   .in0  ($signed(in0)),
+  //   .in1  ($signed(in1)),
+  //   .out  (ops_lt)
+  // );
+assign opts_lt = $signed(in0) < $signed(in1); 
+
+  // Calculate ltu, zero, negative flags
+
+  vc_LtComparator #(32) cond_ltu_comp
+  (
+    .in0  (in0),
+    .in1  (in1),
+    .out  (ops_ltu)
+  );
 endmodule
 
 `endif
