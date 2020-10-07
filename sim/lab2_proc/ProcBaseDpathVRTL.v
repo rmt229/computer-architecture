@@ -122,8 +122,8 @@ module lab2_proc_ProcBaseDpathVRTL
   vc_Mux4 #(32) pc_sel_mux_F
   (
     .in0  (pc_plus4_F),
-    .in1  (br_target_X),
-    .in2  (jal_target_D),
+    .in1  (jal_target_D),
+    .in2  (br_target_X),
     .in3  (jalr_target_X),
     .sel  (pc_sel_F),
     .out  (pc_next_F)

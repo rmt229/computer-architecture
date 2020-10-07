@@ -175,14 +175,18 @@ module lab2_proc_ProcBaseCtrlVRTL
   logic [1:0] pc_sel_X;
 
   // PC select logic
+  localparam pm_pc   = 2'd0;
+  localparam pm_jal  = 2'd1;
+  localparam pm_br   = 2'd2;
+  localparam pm_jalr = 2'd3;
 
   always_comb begin
     if ( pc_redirect_X )       // If a branch is taken in X stage
       pc_sel_F = pc_sel_X;     // Use pc from X
     else if ( pc_redirect_D )
-      pc_sel_F = pc_sel_D;
+      pc_sel_F = pc_sel_D;     // Use pc from D
     else
-      pc_sel_F = 2'b0;         // Use pc+4
+      pc_sel_F = pm_pc;        // Use pc+4
   end
 
   // ostall due to the imem response not valid.
@@ -434,8 +438,15 @@ module lab2_proc_ProcBaseCtrlVRTL
     endcase
   end // always_comb
 
-  assign pc_redirect_D = j_type_D ==  2'd1;          // when jal
-  assign pc_sel_D = j_type_D ==  2'd1 ? 2'd2 : 2'd0; // when jal
+  always_comb begin
+    if (j_type_D == jal) begin
+      pc_redirect_D = 1;
+      pc_sel_D      = pm_jal;  // use jal
+    end else begin
+      pc_redirect_D = 0;
+      pc_sel_D      = pm_pc;  // use pc+4
+    end
+  end
 
   logic [4:0] rf_waddr_D;
   assign rf_waddr_D = inst_rd_D;
@@ -580,30 +591,30 @@ module lab2_proc_ProcBaseCtrlVRTL
   // branch logic, redirect PC in F if branch is taken
 
   always_comb begin
-    if (j_type_X == 2'd2) begin // when jalr
+    if ( val_X && ( j_type_X == jalr ) ) begin
       pc_redirect_X = 1;
-      pc_sel_X      = 2'd3;     // use jalr target
+      pc_sel_X      = pm_jalr;        // use jalr target
     end else if ( val_X && ( br_type_X == br_bne ) ) begin
       pc_redirect_X = !br_cond_eq_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else if ( val_X && ( br_type_X == br_beq ) ) begin // TODO: Should add here 
       pc_redirect_X = br_cond_eq_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else if ( val_X && ( br_type_X == br_blt ) ) begin 
       pc_redirect_X = br_cond_lt_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else if ( val_X && ( br_type_X == br_bltu ) ) begin
       pc_redirect_X = br_cond_ltu_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else if ( val_X && ( br_type_X == br_bge ) ) begin
       pc_redirect_X = !br_cond_eq_X && !br_cond_lt_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else if ( val_X && ( br_type_X == br_bgeu ) ) begin
       pc_redirect_X = !br_cond_eq_X && !br_cond_ltu_X;
-      pc_sel_X      = 2'b1;          // use branch target
+      pc_sel_X      = pm_br;          // use branch target
     end else begin
       pc_redirect_X = 1'b0;
-      pc_sel_X      = 2'b0;          // use pc+4
+      pc_sel_X      = pm_pc;          // use pc+4
     end
   end
 
