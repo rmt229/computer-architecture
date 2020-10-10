@@ -370,6 +370,50 @@ def gen_imm_value_test( inst, imm, result ):
   return gen_imm_template( 0, inst, imm, result )
 
 #-------------------------------------------------------------------------
+# gen_auipc_template
+#-------------------------------------------------------------------------
+
+def gen_auipc_template( num_nops_base, num_nops_dest, imm, result ):
+  return """
+    
+    {nops_base}
+    
+    # Instruction under test
+    auipc x3, {imm}
+    
+    {nops_dest}
+
+    # Check the result
+    csrw proc2mngr, x3 > {result}
+
+  """.format(
+    nops_base = gen_nops(num_nops_base),
+    nops_dest = gen_nops(num_nops_dest),
+    **locals()
+  )
+
+#-------------------------------------------------------------------------
+# gen_auipc_dest_dep_test
+#-------------------------------------------------------------------------
+
+def gen_auipc_dest_dep_test( num_nops, imm, result ):
+  return gen_auipc_template( 0, num_nops, imm, result )
+
+#-------------------------------------------------------------------------
+# gen_auipc_base_dep_test
+#-------------------------------------------------------------------------
+
+def gen_auipc_base_dep_test( num_nops, imm, result ):
+  return gen_auipc_template( num_nops, 0, imm, result )
+
+#-------------------------------------------------------------------------
+# gen_auipc_value_test
+#-------------------------------------------------------------------------
+
+def gen_auipc_value_test( imm, result ):
+  return gen_auipc_template( 0, 0, imm, result )
+
+#-------------------------------------------------------------------------
 # gen_br2_template
 #-------------------------------------------------------------------------
 # Template for branch instructions with two sources. We test two forward
