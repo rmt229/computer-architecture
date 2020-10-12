@@ -16,9 +16,14 @@ from lab2_proc.ProcBaseRTL import ProcBaseRTL
 import inst_addi
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_addi.gen_basic_test     ) ,
-  asm_test( inst_addi.gen_src_eq_dest_test  ),
-  #asm_test( inst_addi.gen_src_dep_test  ),
+  asm_test( inst_addi.gen_basic_test       ),
+  asm_test( inst_addi.gen_dest_dep_test    ),
+  asm_test( inst_addi.gen_src_dep_test     ),
+  asm_test( inst_addi.gen_src_eq_dest_test ),
+  asm_test( inst_addi.gen_rdm_pos_test     ),
+  asm_test( inst_addi.gen_rdm_neg_test     ),
+  asm_test( inst_addi.gen_rdm_self_test    ), #test added
+
   #asm_test( inst_addi.gen_src1_dep_test  ),
   #asm_test( inst_addi.gen_srcs_dep_test  ),
   #asm_test( inst_addi.gen_srcs_dest_test ),

@@ -41,6 +41,21 @@ def gen_basic_test():
     nop
     nop
   """
+def gen_stall_required_test():
+  return """
+    csrr x1, mngr2proc < 0x0f0f0f0f
+    nop
+    nop
+    andi x3, x1, 0x00ff
+    nop
+    nop
+    andi x3, x3, 0x00ff
+    nop
+    nop
+    csrw proc2mngr, x3 >0x0000000f
+    nop
+    nop
+  """
 
 #-------------------------------------------------------------------------
 # gen_dest_dep_test

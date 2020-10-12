@@ -84,7 +84,7 @@ def gen_src_eq_dest_test():
     gen_rimm_src_eq_dest_test( "addi",  405,   380,  785 ),
     gen_rimm_src_eq_dest_test( "addi",   40,   -57,  -17 ),
   ]
-
+  
 #-------------------------------------------------------------------------
 # gen_random_test
 #-------------------------------------------------------------------------
@@ -106,3 +106,17 @@ def gen_rdm_neg_test():
     res = src.int() + imm.int()
     asm_code.append( gen_rimm_value_test( "addi", src.int(), imm.int() , res ) )
   return asm_code
+
+#-----------
+# Adding the sign-inverted version of src to ensure we have a functional addi for all integers
+# in our 12-bit signed addi instruction.
+#-----------
+def gen_rdm_self_test():
+  asm_code = []
+  for i in xrange(50):
+    src = Bits( 32, random.randint(-2047, 2047)) #highest number for signed 12 bit
+    imm = Bits( 12, src.int())
+    res = src.int() + imm.int()
+    asm_code.append( gen_rimm_value_test("addi", src.int(), imm.int(), res))
+  return asm_code
+

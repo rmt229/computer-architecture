@@ -529,7 +529,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // Final ostall signal
 
-  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_hazard_D || imul_req_rdy );
+  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_hazard_D || imul_req_rdy_D ); //changed imul_req_rdy->imul_req_rdy_D
 
   // osquash due to jump instruction in D stage
 
@@ -542,7 +542,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // Set imul_req_val only if not stalling 
 
-  assign imul_req_val = val_D && !stall_D; 
+  assign imul_req_val_D = val_D && !stall_D; //changed imul_req_rdy_val to _D
 
   // Valid signal for the next stage
 
@@ -624,7 +624,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // ostall due to dmemreq not ready.
 
-  assign ostall_X = val_X && ((( dmemreq_type_X != nr ) && !dmemreq_rdy ) || imul_resp_val );
+  assign ostall_X = val_X && ((( dmemreq_type_X != nr ) && !dmemreq_rdy ) || imul_resp_val_X ); //resp_val -> resp_val_X
 
   // osquash due to taken branch, notice we can't osquash if current
   // stage stalls, otherwise we will send osquash twice.
@@ -641,7 +641,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // set imul_resp_rdy only if not stalling
 
-  assign imul_resp_rdy = val_X && !stall_X;
+  assign imul_resp_rdy_X = val_X && !stall_X; //resp_rdy -> resp_rdy_X
 
   // Valid signal for the next stage
 
