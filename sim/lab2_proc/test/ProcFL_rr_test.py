@@ -164,11 +164,8 @@ import inst_sra
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sra.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_sra.gen_value_test     ) ,
+  asm_test( inst_sra.gen_random_test    ) ,
 ])
 def test_sra( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
@@ -181,11 +178,8 @@ import inst_srl
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_srl.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_srl.gen_value_test     ) ,
+  asm_test( inst_srl.gen_random_test    ) ,
 ])
 def test_srl( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
