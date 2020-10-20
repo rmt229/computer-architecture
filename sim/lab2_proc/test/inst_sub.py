@@ -79,12 +79,12 @@ def gen_src0_dep_test():
 
 def gen_src1_dep_test():
   return [
-    gen_rr_src1_dep_test( 5, "sub", 1, 13, 14 ),
-    gen_rr_src1_dep_test( 4, "sub", 1, 14, 15 ),
-    gen_rr_src1_dep_test( 3, "sub", 1, 15, 16 ),
-    gen_rr_src1_dep_test( 2, "sub", 1, 16, 17 ),
-    gen_rr_src1_dep_test( 1, "sub", 1, 17, 18 ),
-    gen_rr_src1_dep_test( 0, "sub", 1, 18, 19 ),
+    gen_rr_src1_dep_test( 5, "sub", 1, 13, -12 ),
+    gen_rr_src1_dep_test( 4, "sub", 1, 14, -13 ),
+    gen_rr_src1_dep_test( 3, "sub", 1, 15, -14 ),
+    gen_rr_src1_dep_test( 2, "sub", 1, 16, -15 ),
+    gen_rr_src1_dep_test( 1, "sub", 1, 17, -16 ),
+    gen_rr_src1_dep_test( 0, "sub", 1, 18, -17 ),
   ]
 
 #-------------------------------------------------------------------------
@@ -93,12 +93,12 @@ def gen_src1_dep_test():
 
 def gen_srcs_dep_test():
   return [
-    gen_rr_srcs_dep_test( 5, "sub", 12, 2, 14 ),
-    gen_rr_srcs_dep_test( 4, "sub", 13, 3, 16 ),
-    gen_rr_srcs_dep_test( 3, "sub", 14, 4, 18 ),
-    gen_rr_srcs_dep_test( 2, "sub", 15, 5, 20 ),
-    gen_rr_srcs_dep_test( 1, "sub", 16, 6, 22 ),
-    gen_rr_srcs_dep_test( 0, "sub", 17, 7, 24 ),
+    gen_rr_srcs_dep_test( 5, "sub", 12, 2, 10 ),
+    gen_rr_srcs_dep_test( 4, "sub", 13, 3, 10 ),
+    gen_rr_srcs_dep_test( 3, "sub", 14, 4, 10 ),
+    gen_rr_srcs_dep_test( 2, "sub", 15, 5, 10 ),
+    gen_rr_srcs_dep_test( 1, "sub", 16, 6, 10 ),
+    gen_rr_srcs_dep_test( 0, "sub", 17, 7, 10 ),
   ]
 
 #-------------------------------------------------------------------------
@@ -107,10 +107,10 @@ def gen_srcs_dep_test():
 
 def gen_srcs_dest_test():
   return [
-    gen_rr_src0_eq_dest_test( "sub", 25, 1, 26 ),
-    gen_rr_src1_eq_dest_test( "sub", 26, 1, 27 ),
-    gen_rr_src0_eq_src1_test( "sub", 27, 54 ),
-    gen_rr_srcs_eq_dest_test( "sub", 28, 56 ),
+    gen_rr_src0_eq_dest_test( "sub", 25, 1, 24 ),
+    gen_rr_src1_eq_dest_test( "sub", 26, 1, 25 ),
+    gen_rr_src0_eq_src1_test( "sub", 27, 0 ),
+    gen_rr_srcs_eq_dest_test( "sub", 28, 0 ),
   ]
 
 #-------------------------------------------------------------------------

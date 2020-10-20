@@ -2,8 +2,8 @@
 // 5-Stage Stalling Pipelined Processor Datapath
 //=========================================================================
 
-`ifndef LAB2_PROC_PIPELINED_PROC_BASE_DPATH_V
-`define LAB2_PROC_PIPELINED_PROC_BASE_DPATH_V
+`ifndef LAB2_PROC_PIPELINED_PROC_ALT_DPATH_V
+`define LAB2_PROC_PIPELINED_PROC_ALT_DPATH_V
 
 `include "vc/arithmetic.v"
 `include "vc/mem-msgs.v"
@@ -15,7 +15,7 @@
 `include "lab2_proc/TinyRV2InstVRTL.v"
 `include "lab2_proc/ProcDpathComponentsVRTL.v"
 
-module lab2_proc_ProcBaseDpathVRTL
+module lab2_proc_ProcAltDpathVRTL
 #(
   parameter p_num_cores = 1
 )
@@ -51,6 +51,8 @@ module lab2_proc_ProcBaseDpathVRTL
   input  logic [1:0]  pc_sel_F,
 
   input  logic        reg_en_D,
+  input  logic [1:0]  op1_bp_sel_D,  // alt bypass
+  input  logic [1:0]  op2_bp_sel_D,  // alt bypass
   input  logic        op1_sel_D,
   input  logic [1:0]  op2_sel_D,
   input  logic [1:0]  csrr_sel_D,
@@ -73,12 +75,12 @@ module lab2_proc_ProcBaseDpathVRTL
   // status signals (dpath->ctrl)
 
   output logic [31:0] inst_D,
-  output logic        imul_req_rdy_D,
+  output logic        imul_req_rdy_D, 
 
   output logic        br_cond_eq_X,
   output logic        br_cond_lt_X,   
   output logic        br_cond_ltu_X,  
-  output logic        imul_resp_val_X,
+  output logic        imul_resp_val_X, 
 
   // stats output
 
@@ -194,12 +196,38 @@ module lab2_proc_ProcBaseDpathVRTL
     .wr_data  (rf_wdata_W)
   );
 
+  logic [31:0] ex_result_X;
+  logic [31:0] wb_result_M;
+  logic [31:0] wb_result_W;
+  logic [31:0] op1_bp_result;
+  logic [31:0] op2_bp_result;
+  
+  vc_Mux4 #(32) op1_bp_sel_mux_D
+  (
+    .in0 (wb_result_W),
+    .in1 (rf_rdata0_D),
+    .in2 (wb_result_M),
+    .in3 (ex_result_X),
+    .sel (op1_bp_sel_D),
+    .out (op1_bp_result)
+  );
+
+  vc_Mux4 #(32) op2_bp_sel_mux_D
+  (
+    .in0 (wb_result_W),
+    .in1 (rf_rdata1_D),
+    .in2 (wb_result_M),
+    .in3 (ex_result_X),
+    .sel (op2_bp_sel_D),
+    .out (op2_bp_result)
+  );
+
   logic [31:0] op1_D;
   
   vc_Mux2 #(32) op1_sel_mux_D
   (
     .in0(pc_D),
-    .in1(rf_rdata0_D),
+    .in1(op1_bp_result),
     .sel(op1_sel_D),
     .out(op1_D)
   );
@@ -226,7 +254,7 @@ module lab2_proc_ProcBaseDpathVRTL
   // csrr sel mux. Basically we are using two muxes here for pedagogy.
   vc_Mux3 #(32) op2_sel_mux_D
   (
-    .in0  (rf_rdata1_D),
+    .in0  (op2_bp_result),
     .in1  (imm_D),
     .in2  (csrr_data_D),
     .sel  (op2_sel_D),
@@ -302,7 +330,7 @@ module lab2_proc_ProcBaseDpathVRTL
     .clk    (clk),
     .reset  (reset),
     .en     (reg_en_X),
-    .d      (rf_rdata1_D),
+    .d      (op2_bp_result),
     .q      (dmemreq_msg_data_reg_X_out)
   );
   
@@ -338,8 +366,6 @@ module lab2_proc_ProcBaseDpathVRTL
     .resp_val (imul_resp_val_X),
     .resp_msg (imul_resp_msg)
   );
-
-  logic [31:0] ex_result_X;
   
   vc_Mux3 #(32) ex_result_sel_mux_X
   (
@@ -366,7 +392,6 @@ module lab2_proc_ProcBaseDpathVRTL
   );
 
   logic [31:0] dmem_result_M;
-  logic [31:0] wb_result_M;
 
   assign dmem_result_M = dmemresp_msg_data;
 
@@ -381,8 +406,6 @@ module lab2_proc_ProcBaseDpathVRTL
   //--------------------------------------------------------------------
   // W stage
   //--------------------------------------------------------------------
-
-  logic [31:0] wb_result_W;
 
   vc_EnResetReg #(32, 0) wb_result_reg_W
   (

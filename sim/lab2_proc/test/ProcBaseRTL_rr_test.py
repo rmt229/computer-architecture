@@ -42,15 +42,11 @@ import inst_sub
   asm_test( inst_sub.gen_basic_test     ) ,
   asm_test( inst_sub.gen_dest_dep_test  ) ,
   asm_test( inst_sub.gen_src0_dep_test  ) ,
-  # asm_test( inst_sub.gen_src1_dep_test  ) ,
-  # asm_test( inst_sub.gen_srcs_dep_test  ) ,
-  # asm_test( inst_sub.gen_srcs_dest_test ) ,
+  asm_test( inst_sub.gen_src1_dep_test  ) ,
+  asm_test( inst_sub.gen_srcs_dep_test  ) ,
+  asm_test( inst_sub.gen_srcs_dest_test ) ,
   asm_test( inst_sub.gen_value_test     ) ,
   asm_test( inst_sub.gen_random_test    ) ,
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ])
 def test_sub( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -66,18 +62,14 @@ import inst_mul
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_mul.gen_basic_test     ) ,
+  asm_test( inst_mul.gen_multiple_mul   ) ,
   asm_test( inst_mul.gen_dest_dep_test  ) ,
   asm_test( inst_mul.gen_src0_dep_test  ) ,
   asm_test( inst_mul.gen_src1_dep_test  ) ,
   asm_test( inst_mul.gen_srcs_dep_test  ) ,
   asm_test( inst_mul.gen_srcs_dest_test ) ,
-  # asm_test( inst_mul.gen_value_test     ) ,
-  # asm_test( inst_mul.gen_random_test    ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_mul.gen_value_test     ) ,
+  asm_test( inst_mul.gen_random_test    ) ,
 ])
 def test_mul( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -162,11 +154,12 @@ import inst_slt
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_slt.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_slt.gen_dest_dep_test ) ,
+  asm_test( inst_slt.gen_src0_dep_test ) ,
+  asm_test( inst_slt.gen_src1_dep_test ) ,
+  asm_test( inst_slt.gen_srcs_dep_test ) ,
+  asm_test( inst_slt.gen_value_test ) ,
+  asm_test( inst_slt.gen_random_test ) ,
 ])
 def test_slt( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -182,11 +175,13 @@ import inst_sltu
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sltu.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_sltu.gen_basic_test     ) ,
+  asm_test( inst_sltu.gen_dest_dep_test ) ,
+  asm_test( inst_sltu.gen_src0_dep_test ) ,
+  asm_test( inst_sltu.gen_src1_dep_test ) ,
+  asm_test( inst_sltu.gen_srcs_dep_test ) ,
+  asm_test( inst_sltu.gen_value_test ) ,
+  asm_test( inst_sltu.gen_random_test ) ,
 ])
 def test_sltu( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -202,11 +197,9 @@ import inst_sra
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sra.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_sra.gen_basic_test     ) ,
+  asm_test( inst_sra.gen_value_test     ) ,
+  asm_test( inst_sra.gen_random_test    ) ,
 ])
 def test_sra( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -238,12 +231,13 @@ import inst_sll
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sll.gen_basic_test     ) ,
-  asm_test( inst_sll.gen_dest_dep_test  ),
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_sll.gen_dest_dep_test  ) ,
+  asm_test( inst_sll.gen_src0_dep_test  ) ,
+  asm_test( inst_sll.gen_src1_dep_test  ) ,
+  asm_test( inst_sll.gen_srcs_dep_test  ) ,
+  asm_test( inst_sll.gen_srcs_dest_test ) ,
+  asm_test( inst_sll.gen_value_test     ) ,
+  asm_test( inst_sll.gen_random_test    ) ,
 ])
 def test_sll( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
