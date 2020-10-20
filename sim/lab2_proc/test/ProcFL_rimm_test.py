@@ -92,11 +92,11 @@ import inst_slti
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_slti.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_slti.gen_dest_dep_test     ) ,
+  asm_test( inst_slti.gen_src_dep_test   ) ,
+  asm_test( inst_slti.gen_src_eq_dest_test ) ,
+  asm_test( inst_slti.gen_value_test ) ,
+  asm_test( inst_slti.gen_random_test ) ,
 ])
 def test_slti( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
@@ -160,11 +160,11 @@ import inst_slli
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_slli.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_slli.gen_dest_dep_test  ) ,
+  asm_test( inst_slli.gen_src_dep_test   ) ,
+  asm_test( inst_slli.gen_src_eq_dest_test ) ,
+  asm_test( inst_slli.gen_value_test ) ,
+  asm_test( inst_slli.gen_random_test ) ,
 ])
 def test_slli( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
