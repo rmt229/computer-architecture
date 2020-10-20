@@ -44,11 +44,7 @@ import inst_sw
   asm_test( inst_sw.gen_value_test        ),
   asm_test( inst_sw.gen_random_test       ),
   asm_test( inst_sw.gen_back_to_back_test ),
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_sw.gen_raw_haz_test      ),
 ])
 def test_sw( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
