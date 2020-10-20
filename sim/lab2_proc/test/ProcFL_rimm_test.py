@@ -189,10 +189,6 @@ import inst_auipc
   asm_test( inst_auipc.gen_value_test    ) ,
   asm_test( inst_auipc.gen_random_test   ) ,
 
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ])
 def test_auipc( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
