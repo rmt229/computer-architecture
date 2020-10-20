@@ -55,9 +55,9 @@ def gen_basic_test():
 #-------------------------------------------------------------------------
 # This test uses addiu to track the control flow for testing purposes.
 # This means this test cannot work on the initial baseline processor
-# which only implements CSRR, MTC0, ADDU, LW, and BNE. That is why we
+# which only implements CSRR, MTC0, ADDU, LW, and beq. That is why we
 # included the above test so we have at least one test that should pass
-# on the initial baseline processor for the BNE instruction.
+# on the initial baseline processor for the beq instruction.
 
 def gen_basic_test():
   return """
@@ -78,7 +78,7 @@ def gen_basic_test():
     nop
 
     # This branch should be taken
-    bne   x1, x2, label_a
+    beq   x1, x2, label_a
     addi  x3, x3, 0b01
 
     nop
@@ -94,7 +94,7 @@ def gen_basic_test():
     addi  x3, x3, 0b10
 
     # Only the second bit should be set if branch was taken
-    csrw  proc2mngr, x3 > 0b10
+    csrw  proc2mngr, x3 > 0b11
 
   """
 
@@ -125,7 +125,6 @@ def gen_src0_dep_taken_test():
     gen_br2_src0_dep_test( 1, "beq", 5, 5, True ),
     gen_br2_src0_dep_test( 0, "beq", 6, 6, True ),
   ]
-
 
 #-------------------------------------------------------------------------
 # gen_src1_dep_nottaken_test
@@ -250,108 +249,108 @@ def gen_back_to_back_test():
      csrr x3, mngr2proc < 1
      csrr x1, mngr2proc < 1
 
-     bne  x3, x0, X0
+     beq  x3, x0, X0
      csrw proc2mngr, x0
      nop
      a0:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y0
+     beq  x3, x0, y0
      b0:
-     bne  x3, x0, a0
+     beq  x3, x0, a0
      c0:
-     bne  x3, x0, b0
+     beq  x3, x0, b0
      d0:
-     bne  x3, x0, c0
+     beq  x3, x0, c0
      e0:
-     bne  x3, x0, d0
+     beq  x3, x0, d0
      f0:
-     bne  x3, x0, e0
+     beq  x3, x0, e0
      g0:
-     bne  x3, x0, f0
+     beq  x3, x0, f0
      h0:
-     bne  x3, x0, g0
+     beq  x3, x0, g0
      i0:
-     bne  x3, x0, h0
+     beq  x3, x0, h0
      X0:
-     bne  x3, x0, i0
+     beq  x3, x0, i0
      y0:
 
-     bne  x3, x0, X1
+     beq  x3, x0, X1
      csrw x0, proc2mngr
      nop
      a1:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y1
+     beq  x3, x0, y1
      b1:
-     bne  x3, x0, a1
+     beq  x3, x0, a1
      c1:
-     bne  x3, x0, b1
+     beq  x3, x0, b1
      d1:
-     bne  x3, x0, c1
+     beq  x3, x0, c1
      e1:
-     bne  x3, x0, d1
+     beq  x3, x0, d1
      f1:
-     bne  x3, x0, e1
+     beq  x3, x0, e1
      g1:
-     bne  x3, x0, f1
+     beq  x3, x0, f1
      h1:
-     bne  x3, x0, g1
+     beq  x3, x0, g1
      i1:
-     bne  x3, x0, h1
+     beq  x3, x0, h1
      X1:
-     bne  x3, x0, i1
+     beq  x3, x0, i1
      y1:
 
-     bne  x3, x0, X2
+     beq  x3, x0, X2
      csrw proc2mngr, x0
      nop
      a2:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y2
+     beq  x3, x0, y2
      b2:
-     bne  x3, x0, a2
+     beq  x3, x0, a2
      c2:
-     bne  x3, x0, b2
+     beq  x3, x0, b2
      d2:
-     bne  x3, x0, c2
+     beq  x3, x0, c2
      e2:
-     bne  x3, x0, d2
+     beq  x3, x0, d2
      f2:
-     bne  x3, x0, e2
+     beq  x3, x0, e2
      g2:
-     bne  x3, x0, f2
+     beq  x3, x0, f2
      h2:
-     bne  x3, x0, g2
+     beq  x3, x0, g2
      i2:
-     bne  x3, x0, h2
+     beq  x3, x0, h2
      X2:
-     bne  x3, x0, i2
+     beq  x3, x0, i2
      y2:
 
-     bne  x3, x0, X3
+     beq  x3, x0, X3
      csrw proc2mngr, x0
      nop
      a3:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y3
+     beq  x3, x0, y3
      b3:
-     bne  x3, x0, a3
+     beq  x3, x0, a3
      c3:
-     bne  x3, x0, b3
+     beq  x3, x0, b3
      d3:
-     bne  x3, x0, c3
+     beq  x3, x0, c3
      e3:
-     bne  x3, x0, d3
+     beq  x3, x0, d3
      f3:
-     bne  x3, x0, e3
+     beq  x3, x0, e3
      g3:
-     bne  x3, x0, f3
+     beq  x3, x0, f3
      h3:
-     bne  x3, x0, g3
+     beq  x3, x0, g3
      i3:
-     bne  x3, x0, h3
+     beq  x3, x0, h3
      X3:
-     bne  x3, x0, i3
+     beq  x3, x0, i3
      y3:
      nop
      nop
