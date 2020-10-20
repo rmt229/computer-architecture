@@ -74,6 +74,19 @@ def gen_value_test():
     gen_rimm_value_test( "sltiu", 0x00000001, 0x001, 0 ),
     gen_rimm_value_test( "sltiu", 0x00000001, 0x002, 1 ),
     
+    gen_rimm_value_test( "sltiu", 0xfffffff0, 0xff0, 0 ),
+    gen_rimm_value_test( "sltiu", 0xfffffff0, 0xff1, 1 ),
+
+    gen_rimm_value_test( "sltiu", 0xffffffff, 0x7ff, 0 ),
     gen_rimm_value_test( "sltiu", 0x000006ff, 0x7ff, 1 ),
-    gen_rimm_value_test( "sltiu", 0x00000fff, 0x8ff, 0 ),
   ]
+
+def gen_random_test():
+  asm_code = []
+  for i in xrange(100):
+    src = Bits( 32, random.randint( 0, 0xffffffff)).uint()
+    imm = Bits( 32, random.randint( 0, 0xfff))
+    if (imm >> 11) == 1: imm = imm | 0xfffff000
+    dest = int(src < imm.uint())
+    asm_code.append( gen_rimm_value_test( "sltiu", src, imm.uint() & 0x00000fff, dest))
+  return asm_code

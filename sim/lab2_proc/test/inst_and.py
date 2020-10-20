@@ -117,6 +117,8 @@ def gen_srcs_dest_test():
 
 def gen_value_test():
   return [
+    gen_rr_value_test( "and", 0x00000000, 0x00000000, 0x00000000 ),
+
     gen_rr_value_test( "and", 0xff00ff00, 0x0f0f0f0f, 0x0f000f00 ),
     gen_rr_value_test( "and", 0x0ff00ff0, 0xf0f0f0f0, 0x00f000f0 ),
     gen_rr_value_test( "and", 0x00ff00ff, 0x0f0f0f0f, 0x000f000f ),

@@ -43,9 +43,46 @@ def gen_basic_test():
     nop
   """
 
-# ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-# Define additional directed and random test cases.
-# '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+def gen_multiple_mul():
+  return '''
+    csrr x1, mngr2proc < 5
+    csrr x2, mngr2proc < 4
+    csrr x3, mngr2proc < 3
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    mul x28, x1, x2
+    mul x29, x1, x3
+    mul x30, x1, x1
+    mul x31, x2, x3
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    csrw proc2mngr, x28 > 20
+    csrw proc2mngr, x29 > 15
+    csrw proc2mngr, x30 > 25
+    csrw proc2mngr, x31 > 12
+    nop
+    nop
+    nop
+    nop 
+    nop
+    nop
+    nop
+'''
 
 #-------------------------------------------------------------------------
 # gen_dest_dep_test
@@ -121,25 +158,14 @@ def gen_srcs_dest_test():
 
 def gen_value_test():
   return [
-
+    # Test basic Functionality
     gen_rr_value_test( "mul", 0x00000000, 0x00000000, 0x00000000 ),
-    gen_rr_value_test( "mul", 0x00000001, 0x00000001, 0x00000002 ),
-    gen_rr_value_test( "mul", 0x00000003, 0x00000007, 0x0000000a ),
-
-    gen_rr_value_test( "mul", 0x00000000, 0xffff8000, 0xffff8000 ),
-    gen_rr_value_test( "mul", 0x80000000, 0x00000000, 0x80000000 ),
-    gen_rr_value_test( "mul", 0x80000000, 0xffff8000, 0x7fff8000 ),
-
-    gen_rr_value_test( "mul", 0x00000000, 0x00007fff, 0x00007fff ),
-    gen_rr_value_test( "mul", 0x7fffffff, 0x00000000, 0x7fffffff ),
-    gen_rr_value_test( "mul", 0x7fffffff, 0x00007fff, 0x80007ffe ),
-
-    gen_rr_value_test( "mul", 0x80000000, 0x00007fff, 0x80007fff ),
-    gen_rr_value_test( "mul", 0x7fffffff, 0xffff8000, 0x7fff7fff ),
-
-    gen_rr_value_test( "mul", 0x00000000, 0xffffffff, 0xffffffff ),
-    gen_rr_value_test( "mul", 0xffffffff, 0x00000001, 0x00000000 ),
-    gen_rr_value_test( "mul", 0xffffffff, 0xffffffff, 0xfffffffe ),
+    gen_rr_value_test( "mul", 0x00000001, 0x00000001, 0x00000001 ),
+    gen_rr_value_test( "mul", 0x00000003, 0x00000007, 0x00000015 ),
+    gen_rr_value_test( "mul", 0x00000001, 0x00000000, 0x00000000 ),
+    gen_rr_value_test( "mul", 0xffffffff, 0xffffffff, 0x00000001 ),
+    gen_rr_value_test( "mul", 0x00000001, 0xffffffff, 0xffffffff ),
+    gen_rr_value_test( "mul", 0xffffffff, 0x00000001, 0xffffffff ),
 
   ]
 
@@ -152,7 +178,7 @@ def gen_random_test():
   for i in xrange(100):
     src0 = Bits( 32, random.randint(0,0xffffffff) )
     src1 = Bits( 32, random.randint(0,0xffffffff) )
-    dest = src0 * src1
+    dest = (src0 * src1) & 0xffffffff
     asm_code.append( gen_rr_value_test( "mul", src0.uint(), src1.uint(), dest.uint() ) )
   return asm_code
 

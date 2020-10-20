@@ -25,7 +25,7 @@ import inst_add
   asm_test( inst_add.gen_value_test     ) ,
   asm_test( inst_add.gen_random_test    ) ,
 ])
-def test_add( name, test, dump_vcd ):
+def test_add(name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
  
 #-------------------------------------------------------------------------
@@ -53,11 +53,14 @@ import inst_mul
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_mul.gen_basic_test     ) ,
-
-  # ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Add more rows to the test case table to test more complicated
-  # scenarios.
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  asm_test( inst_mul.gen_multiple_mul   ) ,
+  asm_test( inst_mul.gen_dest_dep_test  ) ,
+  asm_test( inst_mul.gen_src0_dep_test  ) ,
+  asm_test( inst_mul.gen_src1_dep_test  ) ,
+  asm_test( inst_mul.gen_srcs_dep_test  ) ,
+  asm_test( inst_mul.gen_srcs_dest_test ) ,
+  asm_test( inst_mul.gen_value_test     ) ,
+  asm_test( inst_mul.gen_random_test    ) ,
 ])
 def test_mul( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )

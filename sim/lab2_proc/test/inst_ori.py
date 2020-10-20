@@ -89,6 +89,8 @@ def gen_value_test():
     gen_rimm_value_test( "ori", 0x0ff00ff0, 0x0f0, 0x0ff00ff0 ),
     gen_rimm_value_test( "ori", 0x00ff00ff, 0x00f, 0x00ff00ff ),
     gen_rimm_value_test( "ori", 0xf00ff00f, 0xff0, 0xffffffff ),
+
+    gen_rimm_value_test( "ori", 0x00000000, 0x800, 0xfffff800 ),
   ]
 
 #-------------------------------------------------------------------------
