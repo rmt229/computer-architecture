@@ -49,6 +49,3 @@ import inst_sw
 def test_sw( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
 
-# ''' LAB TASK '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-# random stall and delay
-# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
