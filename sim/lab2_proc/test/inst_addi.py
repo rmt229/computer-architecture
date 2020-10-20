@@ -101,7 +101,7 @@ def gen_rdm_pos_test():
 def gen_rdm_neg_test():
   asm_code = []
   for i in xrange(100):
-    src = Bits( 32, random.randint(    0, 0xffffffff) )
+    src = Bits( 32, random.randint(0, 0xffffffff) )
     imm = Bits( 12, random.randint(-2047, 0 ))
     res = src.int() + imm.int()
     asm_code.append( gen_rimm_value_test( "addi", src.int(), imm.int() , res ) )
