@@ -10,7 +10,7 @@ from inst_utils import *
 #-------------------------------------------------------------------------
 # gen_very_basic_test
 #-------------------------------------------------------------------------
-# The very basic test uses ADDU which is implemented in the initial
+# The very basic test uses ADD which is implemented in the initial
 # baseline processor to do a very simple test. This approach requires
 # using the test source to get an immediate, which is why we use ADDIU in
 # all other control flow tests. We wanted at least one test that works on
@@ -21,7 +21,7 @@ def gen_very_basic_test():
 
     # Use x3 to track the control flow pattern
     csrr  x3, mngr2proc < 0
-    csrr  r4, mngr2proc < 1
+    csrr  x4, mngr2proc < 1
 
     csrr  x1, mngr2proc < 1
     csrr  x2, mngr2proc < 2
@@ -37,7 +37,7 @@ def gen_very_basic_test():
 
     # This branch should be taken
     bne   x1, x2, label_a
-    addu  x3, x3, r4
+    add  x3, x3, x4
 
     nop
     nop
@@ -49,11 +49,11 @@ def gen_very_basic_test():
     nop
 
   label_a:
-    addu  x3, x3, r4
+    add  x3, x3, r4
 
-    # One and only one of the above two addu instructinos should have
-    # been executed which means the result should be exactly one.
-    csrw  proc2mngr, x3 > 1
+    # The branch instruction and the one following it should have been executed,
+    # so tracking the value of register x3 we have the value 2 in x2
+    csrw  proc2mngr, x3 > 2
 
   """
 
@@ -91,6 +91,7 @@ def gen_basic_test():
     nop
     nop
     nop
+    addi  x3, x3, 0b11
     nop
     nop
     nop
@@ -100,8 +101,9 @@ def gen_basic_test():
   label_a:
     addi  x3, x3, 0b10
 
-    # Only the second bit should be set if branch was taken
-    csrw  proc2mngr, x3 > 0b10
+    # The instruction after a branch is always taken, the instruction branches
+    # to label_a, which adds 2. So the final value on x3 should be 0+1+2
+    csrw  proc2mngr, x3 > 0b11
 
   """
 
