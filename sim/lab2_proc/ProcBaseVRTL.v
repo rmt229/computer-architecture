@@ -404,6 +404,8 @@ module lab2_proc_ProcBaseVRTL
   `VC_TRACE_BEGIN
   begin
 
+    vc_trace.append_str( trace_str, "F: " );
+
     if ( !ctrl.val_F )
       vc_trace.append_chars( trace_str, " ", 8 );
     else if ( ctrl.squash_F ) begin
@@ -417,7 +419,7 @@ module lab2_proc_ProcBaseVRTL
       vc_trace.append_str( trace_str, str );
     end
 
-    vc_trace.append_str( trace_str, "|" );
+    vc_trace.append_str( trace_str, "|D: " );
 
     if ( !ctrl.val_D )
       vc_trace.append_chars( trace_str, " ", 23 );
@@ -430,7 +432,7 @@ module lab2_proc_ProcBaseVRTL
     end else
       vc_trace.append_str( trace_str, { 3896'b0, rv2isa.disasm( ctrl.inst_D ) } );
 
-    vc_trace.append_str( trace_str, "|" );
+    vc_trace.append_str( trace_str, "|X: " );
 
     if ( !ctrl.val_X )
       vc_trace.append_chars( trace_str, " ", 4 );
@@ -440,7 +442,7 @@ module lab2_proc_ProcBaseVRTL
     end else
       vc_trace.append_str( trace_str, { 4064'b0, rv2isa.disasm_tiny( ctrl.inst_X ) } );
 
-    vc_trace.append_str( trace_str, "|" );
+    vc_trace.append_str( trace_str, "|M: " );
 
     if ( !ctrl.val_M )
       vc_trace.append_chars( trace_str, " ", 4 );
@@ -450,7 +452,7 @@ module lab2_proc_ProcBaseVRTL
     end else
       vc_trace.append_str( trace_str, { 4064'b0, rv2isa.disasm_tiny( ctrl.inst_M ) } );
 
-    vc_trace.append_str( trace_str, "|" );
+    vc_trace.append_str( trace_str, "|W: " );
 
     if ( !ctrl.val_W )
       vc_trace.append_chars( trace_str, " ", 4 );
