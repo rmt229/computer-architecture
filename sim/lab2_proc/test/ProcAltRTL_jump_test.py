@@ -19,9 +19,9 @@ import inst_jal
   asm_test( inst_jal.gen_basic_test        ) ,
   asm_test( inst_jal.gen_dest_dep_test     ) ,
   asm_test( inst_jal.gen_base_dep_test     ) ,
-  asm_test( inst_jal.gen_dest_max_test ),
-  asm_test( inst_jal.gen_b2b_jal_test ),
-  asm_test( inst_jal.gen_multi_jal_test ),
+  asm_test( inst_jal.gen_dest_max_test     ),
+  asm_test( inst_jal.gen_b2b_jal_test      ),
+  asm_test( inst_jal.gen_multi_jal_test    ),
 ])
 
 def test_jal( name, test, dump_vcd ):
@@ -38,9 +38,9 @@ def test_jal_rand_delays( dump_vcd  ):
 import inst_jalr
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_jalr.gen_basic_test    ) ,
-  asm_test( inst_jalr.gen_dest_dep_test ) ,
-  asm_test( inst_jalr.gen_base_dep_test ) ,
+  asm_test( inst_jalr.gen_basic_test      ) ,
+  asm_test( inst_jalr.gen_dest_dep_test   ) ,
+  asm_test( inst_jalr.gen_base_dep_test   ) ,
   asm_test( inst_jalr.gen_multi_jalr_test ) ,
 ])
 

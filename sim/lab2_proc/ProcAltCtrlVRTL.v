@@ -270,7 +270,7 @@ module lab2_proc_ProcAltCtrlVRTL
   localparam br_x     = 3'bx; // Don't care
   localparam br_na    = 3'b0; // No branch
   localparam br_bne   = 3'b1; // bne
-  localparam br_beq   = 3'd2; // beq TODO: Thought would be useful
+  localparam br_beq   = 3'd2; // beq
   localparam br_blt   = 3'd3; // blt
   localparam br_bltu  = 3'd4; // bltu
   localparam br_bge   = 3'd5; // bge

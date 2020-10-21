@@ -16,16 +16,16 @@ from lab2_proc.ProcAltRTL import ProcAltRTL
 import inst_beq
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_beq.gen_basic_test ) ,
-  asm_test( inst_beq.gen_src0_dep_nottaken_test ),
-  asm_test( inst_beq.gen_src0_dep_taken_test ),
-  asm_test( inst_beq.gen_src1_dep_nottaken_test ),
-  asm_test( inst_beq.gen_src1_dep_taken_test ),
-  asm_test( inst_beq.gen_srcs_dep_nottaken_test ),
-  asm_test( inst_beq.gen_srcs_dep_taken_test),
-  asm_test( inst_beq.gen_src0_eq_src1_test ),
-  asm_test( inst_beq.gen_value_test ),
-  asm_test( inst_beq.gen_random_test ),
+  asm_test( inst_beq.gen_basic_test             ) ,
+  asm_test( inst_beq.gen_src0_dep_nottaken_test ) ,
+  asm_test( inst_beq.gen_src0_dep_taken_test    ) ,
+  asm_test( inst_beq.gen_src1_dep_nottaken_test ) ,
+  asm_test( inst_beq.gen_src1_dep_taken_test    ) ,
+  asm_test( inst_beq.gen_srcs_dep_nottaken_test ) ,
+  asm_test( inst_beq.gen_srcs_dep_taken_test    ) ,
+  asm_test( inst_beq.gen_src0_eq_src1_test      ) ,
+  asm_test( inst_beq.gen_value_test             ) ,
+  asm_test( inst_beq.gen_random_test            ) ,
   # asm_test( inst_beq.gen_back_to_back_test)
 
 
@@ -50,7 +50,7 @@ def test_beq_rand_delays( dump_vcd ):
 import inst_bne
 
 @pytest.mark.parametrize( "name,test", [
-  # TODO asm_test( inst_bne.gen_basic_test             ),
+  asm_test( inst_bne.gen_basic_test             ),
   asm_test( inst_bne.gen_src0_dep_taken_test    ),
   asm_test( inst_bne.gen_src0_dep_nottaken_test ),
   asm_test( inst_bne.gen_src1_dep_taken_test    ),

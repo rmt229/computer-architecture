@@ -38,7 +38,7 @@ import inst_andi
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_andi.gen_basic_test     ) ,
-  asm_test( inst_andi.gen_stall_required_test) ,
+  asm_test( inst_andi.gen_stall_required_test ) ,
   asm_test( inst_andi.gen_dest_dep_test  ) ,
   asm_test( inst_andi.gen_src_dep_test   ) ,
   asm_test( inst_andi.gen_srcs_dest_test ) ,
@@ -101,13 +101,13 @@ def test_xori_rand_delays( dump_vcd ):
 import inst_slti
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_slti.gen_basic_test     ) ,
-  asm_test( inst_slti.gen_basic_test     ) ,
-  asm_test( inst_slti.gen_dest_dep_test     ) ,
-  asm_test( inst_slti.gen_src_dep_test   ) ,
+  asm_test( inst_slti.gen_basic_test       ) ,
+  asm_test( inst_slti.gen_basic_test       ) ,
+  asm_test( inst_slti.gen_dest_dep_test    ) ,
+  asm_test( inst_slti.gen_src_dep_test     ) ,
   asm_test( inst_slti.gen_src_eq_dest_test ) ,
-  asm_test( inst_slti.gen_value_test ) ,
-  asm_test( inst_slti.gen_random_test ) ,
+  asm_test( inst_slti.gen_value_test       ) ,
+  asm_test( inst_slti.gen_random_test      ) ,
 ])
 def test_slti( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -180,12 +180,12 @@ def test_srli_rand_delays( dump_vcd ):
 import inst_slli
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_slli.gen_basic_test     ) ,
-  asm_test( inst_slli.gen_dest_dep_test  ) ,
-  asm_test( inst_slli.gen_src_dep_test   ) ,
+  asm_test( inst_slli.gen_basic_test       ) ,
+  asm_test( inst_slli.gen_dest_dep_test    ) ,
+  asm_test( inst_slli.gen_src_dep_test     ) ,
   asm_test( inst_slli.gen_src_eq_dest_test ) ,
-  asm_test( inst_slli.gen_value_test ) ,
-  asm_test( inst_slli.gen_random_test ) ,
+  asm_test( inst_slli.gen_value_test       ) ,
+  asm_test( inst_slli.gen_random_test      ) ,
 ])
 def test_slli( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
