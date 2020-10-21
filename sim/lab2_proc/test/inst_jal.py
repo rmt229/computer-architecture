@@ -63,23 +63,23 @@ def gen_b2b_jal_test():
     nop                 # 0x0218
     nop                 # 0x021c
     nop                 # 0x0220
-                        #
+                        
     jal   x1, label_a   # 0x0224
     jal   x1, label_b   # 0x0228
+    nop                 # 0x022c
+    nop                 # 0x0230
+    nop                 # 0x0234 
+    nop                 # 0x0238
+    nop                 # 0x023c
+    nop                 # 0x0240
+    nop                 # 0x0244
+    nop                 # 0x0248
 
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
   label_b:
-    addi  x3, x3, 0b01
+    addi  x3, x3, 0b01  # 0x24c
 
   label_a:
-    addi  x3, x3, 0b10
+    addi  x3, x3, 0b10  # 0x250
 
     # Check the link address
     csrw  proc2mngr, x1 > 0x0228 

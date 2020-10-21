@@ -439,7 +439,7 @@ module lab2_proc_ProcBaseCtrlVRTL
   end // always_comb
 
   always_comb begin
-    if (j_type_D == jal) begin
+    if (val_D &&  (j_type_D == jal)) begin
       pc_redirect_D = 1;
       pc_sel_D      = pm_jal;  // use jal
     end else begin
