@@ -93,5 +93,6 @@ def test_alu_fn_equality( dump_vcd, test_verilog ):
     [ 0xfeeeeaa3,   0xf4650000,  14,  0x00000000,   0,        '?',       '?'      ],
   ], dump_vcd, test_verilog )
 
+def test_alu_cmp_
 
 

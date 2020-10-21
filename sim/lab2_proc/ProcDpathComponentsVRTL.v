@@ -73,8 +73,9 @@ module lab2_proc_AluVRTL
       4'd3    : out = in0 & in1;                                       // AND
       4'd4    : out = in0 | in1;                                       // OR
       4'd5    : out = in0 ^ in1;                                       // XOR
-      4'd6    : out = ($signed(in0) < $signed(in1)) ? 32'd1 : 32'd0;   // SLT TODO: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's LT generates 1 bits
-      4'd7    : out = (in0 < in1) ? 32'd1 : 32'd0;                     // SLTU TODO: check correctness
+      4'd6    : out = ($signed(in0) < $signed(in1)) ? 32'd1 : 32'd0;   // SLT TODO: Operator ASSIGN expects 32 bits on the Assign RHS, 
+                                                                       //           but Assign RHS's LT generates 1 bits
+      4'd7    : out = { 31'd0, ops_ltu};                     // SLTU TODO: check correctness
       4'd8    : out = $signed(in0) >>> in1[4:0];                       // SRA
       4'd9    : out = in0 >> in1;                                      // SRL
       4'd10   : out = in0 << in1;                                      // SLL

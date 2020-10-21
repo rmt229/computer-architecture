@@ -410,7 +410,7 @@ module lab2_proc_ProcBaseCtrlVRTL
       `RV2ISA_INST_ANDI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_and, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_XORI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_xor, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_SLTI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_SLTIU   :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_slt, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_SLTIU   :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_sltu, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_SRAI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, y, alu_sra, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_SRLI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_srl, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_SLLI    :cs( y, j_n, br_na,  imm_i, am_rf, y, bm_imm, n, alu_sll, em_a, nr, wm_r, y,  n,   n    );
