@@ -43,6 +43,73 @@ def gen_basic_test():
     nop
   """
 
+def gen_dest_dep_test():
+  return [
+    gen_rr_dest_dep_test( 5, "srl",  2,  1,  1 ),
+    gen_rr_dest_dep_test( 4, "srl",  4,  1,  2 ),
+    gen_rr_dest_dep_test( 3, "srl",  8,  1,  4 ),
+    gen_rr_dest_dep_test( 2, "srl", 16,  1,  8 ),
+    gen_rr_dest_dep_test( 1, "srl", 32,  1, 16 ),
+    gen_rr_dest_dep_test( 0, "srl", 64,  1, 32 ),
+  ]
+
+#-------------------------------------------------------------------------
+# gen_src0_dep_test
+#-------------------------------------------------------------------------
+
+def gen_src0_dep_test():
+  return [
+    gen_rr_src0_dep_test( 5, "srl",  7, 1, 3 ),
+    gen_rr_src0_dep_test( 4, "srl",  8, 1, 4 ),
+    gen_rr_src0_dep_test( 3, "srl",  9, 1, 4 ),
+    gen_rr_src0_dep_test( 2, "srl", 10, 1, 5 ),
+    gen_rr_src0_dep_test( 1, "srl", 11, 1, 5 ),
+    gen_rr_src0_dep_test( 0, "srl", 12, 1, 6 ),
+  ]
+
+#-------------------------------------------------------------------------
+# gen_src1_dep_test
+#-------------------------------------------------------------------------
+
+def gen_src1_dep_test():
+  return [
+    gen_rr_src1_dep_test( 5, "srl", 32, 1, 16 ),
+    gen_rr_src1_dep_test( 4, "srl", 32, 2, 8 ),
+    gen_rr_src1_dep_test( 3, "srl", 32, 3, 4 ),
+    gen_rr_src1_dep_test( 2, "srl", 32, 4, 2 ),
+    gen_rr_src1_dep_test( 1, "srl", 32, 5, 1 ),
+    gen_rr_src1_dep_test( 0, "srl", 32, 6, 0 ),
+  ]
+
+#-------------------------------------------------------------------------
+# gen_srcs_dep_test
+#-------------------------------------------------------------------------
+
+def gen_srcs_dep_test():
+  return [
+    gen_rr_srcs_dep_test( 5, "srl", 12, 2, 3 ),
+    gen_rr_srcs_dep_test( 4, "srl", 13, 3, 1 ),
+    gen_rr_srcs_dep_test( 3, "srl", 14, 4, 0 ),
+    gen_rr_srcs_dep_test( 2, "srl", 15, 5, 0 ),
+    gen_rr_srcs_dep_test( 1, "srl", 16, 6, 0 ),
+  ]
+
+#-------------------------------------------------------------------------
+# gen_srcs_dest_test
+#-------------------------------------------------------------------------
+
+def gen_srcs_dest_test():
+  return [
+    gen_rr_src0_eq_dest_test( "srl", 25, 1, 12 ),
+    gen_rr_src1_eq_dest_test( "srl", 26, 1, 13 ),
+    gen_rr_src0_eq_src1_test( "srl", 2, 0 ),
+    gen_rr_srcs_eq_dest_test( "srl", 1, 0 ),
+  ]
+
+#-------------------------------------------------------------------------
+# gen_value_test
+#-------------------------------------------------------------------------
+
 def gen_value_test():
   return [
     gen_rr_value_test( "srl", 0x00000000, 0x00000000, 0x00000000),
@@ -53,6 +120,9 @@ def gen_value_test():
     gen_rr_value_test( "srl", 0xffffffff, 0x00000004, 0x0fffffff),
 ]
 
+#-------------------------------------------------------------------------
+# gen_random_test
+#-------------------------------------------------------------------------
 
 def gen_random_test():
   asm_code = []
