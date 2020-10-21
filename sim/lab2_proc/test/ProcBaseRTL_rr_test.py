@@ -70,6 +70,8 @@ import inst_mul
   asm_test( inst_mul.gen_srcs_dest_test ) ,
   asm_test( inst_mul.gen_value_test     ) ,
   asm_test( inst_mul.gen_random_test    ) ,
+
+  asm_test( inst_mul.gen_mul_data_haz   ) ,
 ])
 def test_mul( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )

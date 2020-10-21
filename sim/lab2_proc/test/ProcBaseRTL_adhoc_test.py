@@ -19,6 +19,9 @@ import inst_adhoc
   asm_test( inst_adhoc.gen_raw_data_haz_addi ) ,
   asm_test( inst_adhoc.gen_raw_data_haz_lw   ) ,
   asm_test( inst_adhoc.gen_struct_haz_simple ) ,
+
+  # Find Element in Array Test
+  asm_test( inst_adhoc.gen_find_elem_test_100 ) ,
 ])
 def test_adhoc( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )

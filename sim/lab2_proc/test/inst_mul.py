@@ -84,6 +84,39 @@ def gen_multiple_mul():
     nop
 '''
 
+def gen_mul_data_haz():
+  return '''
+    csrr x1, mngr2proc < 5
+    csrr x2, mngr2proc < 4
+    nop
+    nop 
+    nop
+    nop 
+    nop
+    nop
+    nop 
+    nop
+    add x3, x1, x2
+    mul x3, x3, x1
+    add x3, x3, x2
+    mul x3, x1, x3
+    add x3, x3, x1
+    mul x3, x3, x2
+    add x3, x2, x3
+    nop
+    nop
+    nop
+    nop 
+    nop 
+    nop
+    nop
+    csrw proc2mngr, x3 > 0x3ec
+  '''
+
+#def gen_mul_add_sneak_haz():
+#  return '''
+#  '''
+
 #-------------------------------------------------------------------------
 # gen_dest_dep_test
 #-------------------------------------------------------------------------
@@ -179,7 +212,7 @@ def gen_random_test():
     src0 = Bits( 32, random.randint(0,0xffffffff) )
     src1 = Bits( 32, random.randint(0,0xffffffff) )
     dest = (src0 * src1) & 0xffffffff
-    asm_code.append( gen_rr_value_test( "mul", src0.uint(), src1.uint(), dest.uint() ) )
+    asm_code.append( gen_rr_value_test( "mul", src0.int(), src1.int(), dest.int() ) )
   return asm_code
 
 

@@ -5,6 +5,8 @@
 import random
 
 from pymtl import *
+from inst_utils import *
+
 
 #-------------------------------------------------------------------------
 # test_0
@@ -103,3 +105,39 @@ def gen_raw_haz_loop_test():
     .word 0x00000000
     .word 0x00000000
   """
+
+def gen_find_elem_test( l ):
+  data_list = ([0] * (l - 1))
+  data_list.append(1)
+  return '''
+    csrr x12, mngr2proc < 0x00002000
+    csrr x14, mngr2proc < 0x00000001
+    nop
+    nop
+    addi x5,  x0, 0
+
+  loop:
+    lw   x6,  0(x12)
+    bne  x6,  x14, find
+    addi x10, x5, 0
+    jal  x1,  done
+
+  find:
+    addi x12, x12, 4
+    addi x5,  x5,  1
+    bne  x5,  x13, loop
+    addi x10, x0,  -1
+    
+  done:
+    csrw proc2mngr, x10 > {result}
+
+    {memory}
+  
+  '''.format(
+    result = (l-1),
+    memory = gen_word_data(data_list)
+  )
+
+def gen_find_elem_test_100():
+  return gen_find_elem_test(100)
+
