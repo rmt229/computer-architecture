@@ -63,7 +63,6 @@ import inst_mul
   asm_test( inst_mul.gen_srcs_dest_test ) ,
   asm_test( inst_mul.gen_value_test     ) ,
   asm_test( inst_mul.gen_random_test    ) ,
-
   asm_test( inst_mul.gen_mul_data_haz   ) , 
 ])
 def test_mul( name, test, dump_vcd ):
@@ -133,13 +132,13 @@ def test_xor( name, test, dump_vcd ):
 import inst_slt
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_slt.gen_basic_test     ) ,
+  asm_test( inst_slt.gen_basic_test    ) ,
   asm_test( inst_slt.gen_dest_dep_test ) ,
   asm_test( inst_slt.gen_src0_dep_test ) ,
   asm_test( inst_slt.gen_src1_dep_test ) ,
   asm_test( inst_slt.gen_srcs_dep_test ) ,
-  asm_test( inst_slt.gen_value_test ) ,
-  asm_test( inst_slt.gen_random_test ) ,
+  asm_test( inst_slt.gen_value_test    ) ,
+  asm_test( inst_slt.gen_random_test   ) ,
 ])
 def test_slt( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
@@ -151,13 +150,13 @@ def test_slt( name, test, dump_vcd ):
 import inst_sltu
 
 @pytest.mark.parametrize( "name,test", [
-  asm_test( inst_sltu.gen_basic_test     ) ,
+  asm_test( inst_sltu.gen_basic_test    ) ,
   asm_test( inst_sltu.gen_dest_dep_test ) ,
   asm_test( inst_sltu.gen_src0_dep_test ) ,
   asm_test( inst_sltu.gen_src1_dep_test ) ,
   asm_test( inst_sltu.gen_srcs_dep_test ) ,
-  asm_test( inst_sltu.gen_value_test ) ,
-  asm_test( inst_sltu.gen_random_test ) ,
+  asm_test( inst_sltu.gen_value_test    ) ,
+  asm_test( inst_sltu.gen_random_test   ) ,
 
 ])
 def test_sltu( name, test, dump_vcd ):
@@ -209,6 +208,3 @@ import inst_sll
 ])
 def test_sll( name, test, dump_vcd ):
   run_test( ProcFL, test, dump_vcd )
-
-
-         

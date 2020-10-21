@@ -118,4 +118,3 @@ def gen_random_test():
     dest = src & sext(imm,32)
     asm_code.append( gen_rimm_value_test( "andi", src.uint(), imm.uint(), dest.uint() ) )
   return asm_code
-

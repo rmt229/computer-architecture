@@ -28,4 +28,3 @@ def test_csr( name, test, dump_vcd ):
 def test_csr_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_csr.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=10, mem_stall_prob=0.5, mem_latency=3)
-

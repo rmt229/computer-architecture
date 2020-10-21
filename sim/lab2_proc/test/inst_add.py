@@ -151,4 +151,3 @@ def gen_random_test():
     dest = src0 + src1
     asm_code.append( gen_rr_value_test( "add", src0.uint(), src1.uint(), dest.uint() ) )
   return asm_code
-

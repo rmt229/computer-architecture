@@ -561,21 +561,21 @@ module lab2_proc_ProcAltCtrlVRTL
   // bypass if write address in X matches rs1 in D
   
   logic bypass_waddr_X_rs1_D;
-  assign bypass_waddr_X_rs1_D = val_D && rs1_en_D && val_X && rf_wen_pending_X // TODO: check if pending X is the correct choice
+  assign bypass_waddr_X_rs1_D = val_D && rs1_en_D && val_X && rf_wen_pending_X
                                 && ( inst_rs1_D == rf_waddr_X ) && ( rf_waddr_X != 0 )
                                 && ( dmemreq_type_X != ld );
   
   // bypass if write address in M matches rs1 in D
   
   logic bypass_waddr_M_rs1_D;
-  assign bypass_waddr_M_rs1_D = val_D && rs1_en_D && val_M && rf_wen_pending_M // TODO: check if pending X is the correct choice
+  assign bypass_waddr_M_rs1_D = val_D && rs1_en_D && val_M && rf_wen_pending_M
                                 && ( inst_rs1_D == rf_waddr_M ) && ( rf_waddr_M != 0 )
                                 && ( dmemreq_type_M != ld || ( dmemreq_type_M == ld && dmemresp_rdy ) );
 
   // bypass if write address in W matches rs1 in D
   
   logic bypass_waddr_W_rs1_D;
-  assign bypass_waddr_W_rs1_D = val_D && rs1_en_D && val_W && rf_wen_pending_W // TODO: check if pending X is the correct choice
+  assign bypass_waddr_W_rs1_D = val_D && rs1_en_D && val_W && rf_wen_pending_W
                                 && ( inst_rs1_D == rf_waddr_W ) && ( rf_waddr_W != 0 );
 
   // control op1 bp mux
@@ -594,21 +594,21 @@ module lab2_proc_ProcAltCtrlVRTL
   // bypass if write address in X matches rs2 in D
   
   logic bypass_waddr_X_rs2_D;
-  assign bypass_waddr_X_rs2_D = val_D && rs2_en_D && val_X && rf_wen_pending_X // TODO: check if pending X is the correct choice
+  assign bypass_waddr_X_rs2_D = val_D && rs2_en_D && val_X && rf_wen_pending_X
                                 && ( inst_rs2_D == rf_waddr_X ) && ( rf_waddr_X != 0 )
                                 && ( dmemreq_type_X != ld );
   
   // bypass if write address in M matches rs2 in D
   
   logic bypass_waddr_M_rs2_D;
-  assign bypass_waddr_M_rs2_D = val_D && rs2_en_D && val_M && rf_wen_pending_M // TODO: check if pending X is the correct choice
+  assign bypass_waddr_M_rs2_D = val_D && rs2_en_D && val_M && rf_wen_pending_M
                                 && ( inst_rs2_D == rf_waddr_M ) && ( rf_waddr_M != 0 )
                                 && ( dmemreq_type_M != ld || ( dmemreq_type_M == ld && dmemresp_rdy ) );
 
   // bypass if write address in W matches rs2 in D
   
   logic bypass_waddr_W_rs2_D;
-  assign bypass_waddr_W_rs2_D = val_D && rs2_en_D && val_W && rf_wen_pending_W // TODO: check if pending X is the correct choice
+  assign bypass_waddr_W_rs2_D = val_D && rs2_en_D && val_W && rf_wen_pending_W
                                 && ( inst_rs2_D == rf_waddr_W ) && ( rf_waddr_W != 0 );
 
   // control op2 bp mux

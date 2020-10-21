@@ -4,7 +4,7 @@
 
 import random
 
-from pymtl                import *
+from pymtl import *
 from inst_utils import *
 
 #-------------------------------------------------------------------------
