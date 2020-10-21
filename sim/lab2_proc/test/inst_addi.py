@@ -111,9 +111,9 @@ def gen_rdm_neg_test():
 def gen_rdm_self_test():
   asm_code = []
   for i in xrange(50):
-    src = Bits( 32, random.randint(-2047, 2047)) #highest number for signed 12 bit
-    imm = Bits( 12, src.int())
-    res = src.int() + imm.int()
+    src = Bits( 32, random.randint(0, 0xffffffff))
+    imm = Bits( 12, random.randint(0, 0xfff))
+    res = (src.int() + imm.int()) & 0xffffffff
     asm_code.append( gen_rimm_value_test("addi", src.int(), imm.int(), res))
   return asm_code
 
