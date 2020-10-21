@@ -12,6 +12,34 @@ from inst_utils import *
 # test_0
 #-------------------------------------------------------------------------
 
+def test_0() :
+  return """
+    csrr x1, mngr2proc, < 5
+    csrr x2, mngr2proc, < 6
+    
+    addi x3, x1, 1
+    addi x3, x2, 1
+    add  x5, x3, x3
+    
+    csrw proc2mngr, x5 > 0x0000000e
+  """
+
+#-------------------------------------------------------------------------
+# test_1
+#-------------------------------------------------------------------------
+
+def test_1() :
+  return """
+    csrr x1, mngr2proc, < 0x00002000
+    
+    lw x2, 0(x1)
+    addi  x2, x2, 0x00000001
+    
+    csrw proc2mngr, x2 > 0x00000002
+    .data
+    .word 0x00000001
+  """
+
 def gen_raw_data_haz_addi() :
   return """
     csrr x1, mngr2proc, < 5
