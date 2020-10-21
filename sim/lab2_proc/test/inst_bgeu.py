@@ -31,13 +31,12 @@ def gen_basic_test():
 
     # This branch should be taken
     bgeu   x1, x2, label_a
+    nop
+    nop
+    nop
+    nop
+    nop
     addi  x3, x3, 0b01
-
-    nop
-    nop
-    nop
-    nop
-    nop
     nop
     nop
     nop
@@ -45,7 +44,7 @@ def gen_basic_test():
   label_a:
     addi  x3, x3, 0b10
 
-    # Only the second bit should be set if branch was taken
+    # Only the second inst should be set if branch was taken
     csrw proc2mngr, x3 > 0b10
 
   """
@@ -182,10 +181,10 @@ def gen_random_test():
   asm_code = []
   for i in xrange(25):
     taken = random.choice([True, False])
-    src0  = Bits( 32, random.randint(0,0xffffffff) )
+    src0  = Bits( 32, random.randint(0,0xffff) )
     if taken:
       # Branch taken, op1 >= op2
-      src1 = Bits( 32, random.randint(0,0xffffffff) )
+      src1 = Bits( 32, random.randint(0,0xffff) )
       if src0 < src1:
         src1 = src0 - 1
     else:
@@ -205,108 +204,108 @@ def gen_back_to_back_test():
      csrr x3, mngr2proc < 1
      csrr x1, mngr2proc < 1
 
-     bne  x3, x0, X0
+     bgeu  x3, x0, X0
      csrw proc2mngr, x0
      nop
      a0:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y0
+     bgeu  x3, x0, y0
      b0:
-     bne  x3, x0, a0
+     bgeu  x3, x0, a0
      c0:
-     bne  x3, x0, b0
+     bgeu  x3, x0, b0
      d0:
-     bne  x3, x0, c0
+     bgeu  x3, x0, c0
      e0:
-     bne  x3, x0, d0
+     bgeu  x3, x0, d0
      f0:
-     bne  x3, x0, e0
+     bgeu  x3, x0, e0
      g0:
-     bne  x3, x0, f0
+     bgeu  x3, x0, f0
      h0:
-     bne  x3, x0, g0
+     bgeu  x3, x0, g0
      i0:
-     bne  x3, x0, h0
+     bgeu  x3, x0, h0
      X0:
-     bne  x3, x0, i0
+     bgeu  x3, x0, i0
      y0:
 
-     bne  x3, x0, X1
+     bgeu  x3, x0, X1
      csrw x0, proc2mngr
      nop
      a1:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y1
+     bgeu  x3, x0, y1
      b1:
-     bne  x3, x0, a1
+     bgeu  x3, x0, a1
      c1:
-     bne  x3, x0, b1
+     bgeu  x3, x0, b1
      d1:
-     bne  x3, x0, c1
+     bgeu  x3, x0, c1
      e1:
-     bne  x3, x0, d1
+     bgeu  x3, x0, d1
      f1:
-     bne  x3, x0, e1
+     bgeu  x3, x0, e1
      g1:
-     bne  x3, x0, f1
+     bgeu  x3, x0, f1
      h1:
-     bne  x3, x0, g1
+     bgeu  x3, x0, g1
      i1:
-     bne  x3, x0, h1
+     bgeu  x3, x0, h1
      X1:
-     bne  x3, x0, i1
+     bgeu  x3, x0, i1
      y1:
 
-     bne  x3, x0, X2
+     bgeu  x3, x0, X2
      csrw proc2mngr, x0
      nop
      a2:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y2
+     bgeu  x3, x0, y2
      b2:
-     bne  x3, x0, a2
+     bgeu  x3, x0, a2
      c2:
-     bne  x3, x0, b2
+     bgeu  x3, x0, b2
      d2:
-     bne  x3, x0, c2
+     bgeu  x3, x0, c2
      e2:
-     bne  x3, x0, d2
+     bgeu  x3, x0, d2
      f2:
-     bne  x3, x0, e2
+     bgeu  x3, x0, e2
      g2:
-     bne  x3, x0, f2
+     bgeu  x3, x0, f2
      h2:
-     bne  x3, x0, g2
+     bgeu  x3, x0, g2
      i2:
-     bne  x3, x0, h2
+     bgeu  x3, x0, h2
      X2:
-     bne  x3, x0, i2
+     bgeu  x3, x0, i2
      y2:
 
-     bne  x3, x0, X3
+     bgeu  x3, x0, X3
      csrw proc2mngr, x0
      nop
      a3:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y3
+     bgeu  x3, x0, y3
      b3:
-     bne  x3, x0, a3
+     bgeu  x3, x0, a3
      c3:
-     bne  x3, x0, b3
+     bgeu  x3, x0, b3
      d3:
-     bne  x3, x0, c3
+     bgeu  x3, x0, c3
      e3:
-     bne  x3, x0, d3
+     bgeu  x3, x0, d3
      f3:
-     bne  x3, x0, e3
+     bgeu  x3, x0, e3
      g3:
-     bne  x3, x0, f3
+     bgeu  x3, x0, f3
      h3:
-     bne  x3, x0, g3
+     bgeu  x3, x0, g3
      i3:
-     bne  x3, x0, h3
+     bgeu  x3, x0, h3
      X3:
-     bne  x3, x0, i3
+     bgeu  x3, x0, i3
      y3:
      nop
      nop

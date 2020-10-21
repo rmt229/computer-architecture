@@ -21,8 +21,6 @@ def gen_very_basic_test():
 
     # Use x3 to track the control flow pattern
     csrr  x3, mngr2proc < 0
-    csrr  x4, mngr2proc < 1
-
     csrr  x1, mngr2proc < 1
     csrr  x2, mngr2proc < 2
 
@@ -37,23 +35,22 @@ def gen_very_basic_test():
 
     # This branch should be taken
     bne   x1, x2, label_a
-    add  x3, x3, x4
-
     nop
     nop
     nop
     nop
     nop
+    addi  x3, x3, 1
     nop
     nop
     nop
 
   label_a:
-    add  x3, x3, r4
+    addi  x3, x3, 1
 
     # The branch instruction and the one following it should have been executed,
     # so tracking the value of register x3 we have the value 2 in x2
-    csrw  proc2mngr, x3 > 2
+    csrw  proc2mngr, x3 > 1
 
   """
 
@@ -72,8 +69,12 @@ def gen_basic_test():
     # Use x3 to track the control flow pattern
     addi  x3, x0, 0
 
-    csrr  x1, mngr2proc < 1
-    csrr  x2, mngr2proc < 2
+    add   x1, x0, 0
+    add   x2, x0, 0
+    addi  x1, x1, 1
+    addi  x2, x2, 2
+
+    # csrr  x2, mngr2proc < 2
 
     nop
     nop
@@ -86,12 +87,12 @@ def gen_basic_test():
 
     # This branch should be taken
     bne   x1, x2, label_a
-    addi  x3, x3, 0b01
+    addi  x3, x3, 1
 
     nop
     nop
     nop
-    addi  x3, x3, 0b11
+    addi  x3, x3, 3
     nop
     nop
     nop
@@ -99,11 +100,12 @@ def gen_basic_test():
     nop
 
   label_a:
-    addi  x3, x3, 0b10
+    addi  x3, x3, 2
 
     # The instruction after a branch is always taken, the instruction branches
     # to label_a, which adds 2. So the final value on x3 should be 0+1+2
-    csrw  proc2mngr, x3 > 0b11
+    
+    csrw  proc2mngr, x3 > 3
 
   """
 

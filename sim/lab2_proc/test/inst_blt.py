@@ -51,7 +51,7 @@ def gen_basic_test():
   """
 
 # ''' LAB TASK ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-# Define additional directed and random test cases.
+# Define additional directed and random test cases. DONE
 # '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 #-------------------------------------------------------------------------
 # gen_src0_dep_taken_test
@@ -62,9 +62,9 @@ def gen_src0_dep_taken_test():
     gen_br2_src0_dep_test( 5, "blt", 1, 7, True ),
     gen_br2_src0_dep_test( 4, "blt", 2, 7, True ),
     gen_br2_src0_dep_test( 3, "blt", 3, 7, True ),
-    gen_br2_src0_dep_test( 2, "blt", 4, 7, True ),
-    gen_br2_src0_dep_test( 1, "blt", 5, 7, True ),
-    gen_br2_src0_dep_test( 0, "blt", 6, 7, True ),
+    gen_br2_src0_dep_test( 2, "blt", -4, 7, True ),
+    gen_br2_src0_dep_test( 1, "blt", -5, 7, True ),
+    gen_br2_src0_dep_test( 0, "blt", -6, 7, True ),
   ]
 
 #-------------------------------------------------------------------------
@@ -73,9 +73,9 @@ def gen_src0_dep_taken_test():
 
 def gen_src0_dep_nottaken_test():
   return [
-    gen_br2_src0_dep_test( 5, "blt", 1, 1, False ),
-    gen_br2_src0_dep_test( 4, "blt", 2, 2, False ),
-    gen_br2_src0_dep_test( 3, "blt", 3, 3, False ),
+    gen_br2_src0_dep_test( 5, "blt", 1, -1, False ),
+    gen_br2_src0_dep_test( 4, "blt", 2, -2, False ),
+    gen_br2_src0_dep_test( 3, "blt", 3, -3, False ),
     gen_br2_src0_dep_test( 2, "blt", 4, 4, False ),
     gen_br2_src0_dep_test( 1, "blt", 5, 5, False ),
     gen_br2_src0_dep_test( 0, "blt", 6, 6, False ),
@@ -88,11 +88,11 @@ def gen_src0_dep_nottaken_test():
 def gen_src1_dep_taken_test():
   return [
     gen_br2_src1_dep_test( 5, "blt", 7, 8,  True ),
-    gen_br2_src1_dep_test( 4, "blt", 7, 9,  True ),
+    gen_br2_src1_dep_test( 4, "blt", -7, 9,  True ),
     gen_br2_src1_dep_test( 3, "blt", 7, 10, True ),
-    gen_br2_src1_dep_test( 2, "blt", 7, 11, True ),
+    gen_br2_src1_dep_test( 2, "blt", -7, 11, True ),
     gen_br2_src1_dep_test( 1, "blt", 7, 12, True ),
-    gen_br2_src1_dep_test( 0, "blt", 7, 13, True ),
+    gen_br2_src1_dep_test( 0, "blt", -7, 13, True ),
   ]
 
 #-------------------------------------------------------------------------
@@ -104,8 +104,8 @@ def gen_src1_dep_nottaken_test():
     gen_br2_src1_dep_test( 5, "blt", -1, -1, False ),
     gen_br2_src1_dep_test( 4, "blt", 2, 2, False ),
     gen_br2_src1_dep_test( 3, "blt", 3, 3, False ),
-    gen_br2_src1_dep_test( 2, "blt", 4, 4, False ),
-    gen_br2_src1_dep_test( 1, "blt", 5, 5, False ),
+    gen_br2_src1_dep_test( 2, "blt", 4, -4, False ),
+    gen_br2_src1_dep_test( 1, "blt", -5, -10, False ),
     gen_br2_src1_dep_test( 0, "blt", 6, 6, False ),
   ]
 
@@ -115,12 +115,12 @@ def gen_src1_dep_nottaken_test():
 
 def gen_srcs_dep_taken_test():
   return [
-    gen_br2_srcs_dep_test( 5, "blt", 1, 2, True ),
+    gen_br2_srcs_dep_test( 5, "blt", -1, 0, True ),
     gen_br2_srcs_dep_test( 4, "blt", 2, 3, True ),
-    gen_br2_srcs_dep_test( 3, "blt", 3, 4, True ),
+    gen_br2_srcs_dep_test( 3, "blt", -3, 4, True ),
     gen_br2_srcs_dep_test( 2, "blt", 4, 5, True ),
-    gen_br2_srcs_dep_test( 1, "blt", 5, 6, True ),
-    gen_br2_srcs_dep_test( 0, "blt", 6, 7, True ),
+    gen_br2_srcs_dep_test( 1, "blt", -6, -5, True ),
+    gen_br2_srcs_dep_test( 0, "blt", -6, 7, True ),
   ]
 
 #-------------------------------------------------------------------------
@@ -131,8 +131,8 @@ def gen_srcs_dep_nottaken_test():
   return [
     gen_br2_srcs_dep_test( 5, "blt", 1, 0, False ),
     gen_br2_srcs_dep_test( 4, "blt", 2, 1, False ),
-    gen_br2_srcs_dep_test( 3, "blt", 3, 2, False ),
-    gen_br2_srcs_dep_test( 2, "blt", 4, 3, False ),
+    gen_br2_srcs_dep_test( 3, "blt", 3, -2, False ),
+    gen_br2_srcs_dep_test( 2, "blt", -3, -4, False ),
     gen_br2_srcs_dep_test( 1, "blt", 5, 4, False ),
     gen_br2_srcs_dep_test( 0, "blt", 6, 5, False ),
   ]
@@ -202,108 +202,108 @@ def gen_back_to_back_test():
      csrr x3, mngr2proc < 1
      csrr x1, mngr2proc < 1
 
-     bne  x3, x0, X0
+     blt  x3, x0, X0
      csrw proc2mngr, x0
      nop
      a0:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y0
+     blt  x3, x0, y0
      b0:
-     bne  x3, x0, a0
+     blt  x3, x0, a0
      c0:
-     bne  x3, x0, b0
+     blt  x3, x0, b0
      d0:
-     bne  x3, x0, c0
+     blt  x3, x0, c0
      e0:
-     bne  x3, x0, d0
+     blt  x3, x0, d0
      f0:
-     bne  x3, x0, e0
+     blt  x3, x0, e0
      g0:
-     bne  x3, x0, f0
+     blt  x3, x0, f0
      h0:
-     bne  x3, x0, g0
+     blt  x3, x0, g0
      i0:
-     bne  x3, x0, h0
+     blt  x3, x0, h0
      X0:
-     bne  x3, x0, i0
+     blt  x3, x0, i0
      y0:
 
-     bne  x3, x0, X1
+     blt  x3, x0, X1
      csrw x0, proc2mngr
      nop
      a1:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y1
+     blt  x3, x0, y1
      b1:
-     bne  x3, x0, a1
+     blt  x3, x0, a1
      c1:
-     bne  x3, x0, b1
+     blt  x3, x0, b1
      d1:
-     bne  x3, x0, c1
+     blt  x3, x0, c1
      e1:
-     bne  x3, x0, d1
+     blt  x3, x0, d1
      f1:
-     bne  x3, x0, e1
+     blt  x3, x0, e1
      g1:
-     bne  x3, x0, f1
+     blt  x3, x0, f1
      h1:
-     bne  x3, x0, g1
+     blt  x3, x0, g1
      i1:
-     bne  x3, x0, h1
+     blt  x3, x0, h1
      X1:
-     bne  x3, x0, i1
+     blt  x3, x0, i1
      y1:
 
-     bne  x3, x0, X2
+     blt  x3, x0, X2
      csrw proc2mngr, x0
      nop
      a2:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y2
+     blt  x3, x0, y2
      b2:
-     bne  x3, x0, a2
+     blt  x3, x0, a2
      c2:
-     bne  x3, x0, b2
+     blt  x3, x0, b2
      d2:
-     bne  x3, x0, c2
+     blt  x3, x0, c2
      e2:
-     bne  x3, x0, d2
+     blt  x3, x0, d2
      f2:
-     bne  x3, x0, e2
+     blt  x3, x0, e2
      g2:
-     bne  x3, x0, f2
+     blt  x3, x0, f2
      h2:
-     bne  x3, x0, g2
+     blt  x3, x0, g2
      i2:
-     bne  x3, x0, h2
+     blt  x3, x0, h2
      X2:
-     bne  x3, x0, i2
+     blt  x3, x0, i2
      y2:
 
-     bne  x3, x0, X3
+     blt  x3, x0, X3
      csrw proc2mngr, x0
      nop
      a3:
      csrw proc2mngr, x1 > 1
-     bne  x3, x0, y3
+     blt  x3, x0, y3
      b3:
-     bne  x3, x0, a3
+     blt  x3, x0, a3
      c3:
-     bne  x3, x0, b3
+     blt  x3, x0, b3
      d3:
-     bne  x3, x0, c3
+     blt  x3, x0, c3
      e3:
-     bne  x3, x0, d3
+     blt  x3, x0, d3
      f3:
-     bne  x3, x0, e3
+     blt  x3, x0, e3
      g3:
-     bne  x3, x0, f3
+     blt  x3, x0, f3
      h3:
-     bne  x3, x0, g3
+     blt  x3, x0, g3
      i3:
-     bne  x3, x0, h3
+     blt  x3, x0, h3
      X3:
-     bne  x3, x0, i3
+     blt  x3, x0, i3
      y3:
      nop
      nop

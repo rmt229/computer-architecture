@@ -60,7 +60,7 @@ def gen_basic_test():
 
 def gen_src0_dep_taken_test():
   return [
-    gen_br2_src1_dep_test( 6, "bge", 7, 7,  True ),
+    gen_br2_src0_dep_test( 6, "bge", 7, 7,  True ),
     gen_br2_src0_dep_test( 5, "bge", 8,  7, True ),
     gen_br2_src0_dep_test( 4, "bge", 9,  7, True ),
     gen_br2_src0_dep_test( 3, "bge", 10, 7, True ),
@@ -187,13 +187,13 @@ def gen_random_test():
       # Branch taken, op1 >= op2
       src1 = Bits( 32, random.randint(0,0xffffffff) )
       if src0.int() < src1.int():
-        src1 = src0 - 1
+       src1 = src0 - 1
     else:
       # Branch not taken, op1 < op2
       src1 = src0 + 1
     asm_code.append( gen_br2_value_test( "bge", src0.uint(), src1.uint(), taken ) )
   return asm_code
-
+ 
 #-------------------------------------------------------------------------
 # gen_back_to_back_test
 #-------------------------------------------------------------------------
