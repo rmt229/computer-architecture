@@ -54,6 +54,7 @@ def test_sub( name, test, dump_vcd ):
 def test_sub_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_sub.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # mul
 #-------------------------------------------------------------------------
@@ -62,7 +63,6 @@ import inst_mul
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_mul.gen_basic_test     ) ,
-  asm_test( inst_mul.gen_multiple_mul   ) ,
   asm_test( inst_mul.gen_dest_dep_test  ) ,
   asm_test( inst_mul.gen_src0_dep_test  ) ,
   asm_test( inst_mul.gen_src1_dep_test  ) ,
@@ -70,8 +70,6 @@ import inst_mul
   asm_test( inst_mul.gen_srcs_dest_test ) ,
   asm_test( inst_mul.gen_value_test     ) ,
   asm_test( inst_mul.gen_random_test    ) ,
-
-  asm_test( inst_mul.gen_mul_data_haz   ) ,
 ])
 def test_mul( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -79,6 +77,7 @@ def test_mul( name, test, dump_vcd ):
 def test_mul_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_mul.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # and
 #-------------------------------------------------------------------------
@@ -156,12 +155,13 @@ import inst_slt
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_slt.gen_basic_test     ) ,
-  asm_test( inst_slt.gen_dest_dep_test ) ,
-  asm_test( inst_slt.gen_src0_dep_test ) ,
-  asm_test( inst_slt.gen_src1_dep_test ) ,
-  asm_test( inst_slt.gen_srcs_dep_test ) ,
-  asm_test( inst_slt.gen_value_test ) ,
-  asm_test( inst_slt.gen_random_test ) ,
+  asm_test( inst_slt.gen_dest_dep_test  ) ,
+  asm_test( inst_slt.gen_src0_dep_test  ) ,
+  asm_test( inst_slt.gen_src1_dep_test  ) ,
+  asm_test( inst_slt.gen_srcs_dep_test  ) ,
+  asm_test( inst_slt.gen_srcs_dest_test ) ,
+  asm_test( inst_slt.gen_value_test     ) ,
+  asm_test( inst_slt.gen_random_test    ) ,
 ])
 def test_slt( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -169,6 +169,7 @@ def test_slt( name, test, dump_vcd ):
 def test_slt_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_slt.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # sltu
 #-------------------------------------------------------------------------
@@ -177,13 +178,13 @@ import inst_sltu
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sltu.gen_basic_test     ) ,
-  asm_test( inst_sltu.gen_basic_test     ) ,
-  asm_test( inst_sltu.gen_dest_dep_test ) ,
-  asm_test( inst_sltu.gen_src0_dep_test ) ,
-  asm_test( inst_sltu.gen_src1_dep_test ) ,
-  asm_test( inst_sltu.gen_srcs_dep_test ) ,
-  asm_test( inst_sltu.gen_value_test ) ,
-  asm_test( inst_sltu.gen_random_test ) ,
+  asm_test( inst_sltu.gen_dest_dep_test  ) ,
+  asm_test( inst_sltu.gen_src0_dep_test  ) ,
+  asm_test( inst_sltu.gen_src1_dep_test  ) ,
+  asm_test( inst_sltu.gen_srcs_dep_test  ) ,
+  asm_test( inst_sltu.gen_srcs_dest_test ) ,
+  asm_test( inst_sltu.gen_value_test     ) ,
+  asm_test( inst_sltu.gen_random_test    ) ,
 ])
 def test_sltu( name, test, dump_vcd ):
   run_test( ProcBaseRTL, test, dump_vcd )
@@ -191,6 +192,7 @@ def test_sltu( name, test, dump_vcd ):
 def test_sltu_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_sltu.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # sra
 #-------------------------------------------------------------------------
@@ -199,7 +201,11 @@ import inst_sra
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_sra.gen_basic_test     ) ,
-  asm_test( inst_sra.gen_basic_test     ) ,
+  asm_test( inst_sra.gen_dest_dep_test  ) ,
+  asm_test( inst_sra.gen_src0_dep_test  ) ,
+  asm_test( inst_sra.gen_src1_dep_test  ) ,
+  asm_test( inst_sra.gen_srcs_dep_test  ) ,
+  asm_test( inst_sra.gen_srcs_dest_test ) ,
   asm_test( inst_sra.gen_value_test     ) ,
   asm_test( inst_sra.gen_random_test    ) ,
 ])
@@ -209,6 +215,7 @@ def test_sra( name, test, dump_vcd ):
 def test_sra_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_sra.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # srl
 #-------------------------------------------------------------------------
@@ -217,6 +224,11 @@ import inst_srl
 
 @pytest.mark.parametrize( "name,test", [
   asm_test( inst_srl.gen_basic_test     ) ,
+  asm_test( inst_srl.gen_dest_dep_test  ) ,
+  asm_test( inst_srl.gen_src0_dep_test  ) ,
+  asm_test( inst_srl.gen_src1_dep_test  ) ,
+  asm_test( inst_srl.gen_srcs_dep_test  ) ,
+  asm_test( inst_srl.gen_srcs_dest_test ) ,
   asm_test( inst_srl.gen_value_test     ) ,
   asm_test( inst_srl.gen_random_test    ) ,
 ])
@@ -226,6 +238,7 @@ def test_srl( name, test, dump_vcd ):
 def test_srl_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_srl.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
+
 #-------------------------------------------------------------------------
 # sll
 #-------------------------------------------------------------------------
@@ -248,5 +261,3 @@ def test_sll( name, test, dump_vcd ):
 def test_sll_rand_delays( dump_vcd ):
   run_test( ProcBaseRTL, inst_sll.gen_random_test, dump_vcd,
             src_delay=3, sink_delay=5, mem_stall_prob=0.5, mem_latency=3 )
-
-
