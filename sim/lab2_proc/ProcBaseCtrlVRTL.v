@@ -542,7 +542,7 @@ module lab2_proc_ProcBaseCtrlVRTL
 
   // Set imul_req_val only if not stalling
 
-  assign imul_req_val_D = val_D && !stall_D;
+  assign imul_req_val_D = val_D && !stall_D && (alu_fn_D == alu_mul);
 
   // Valid signal for the next stage
 
