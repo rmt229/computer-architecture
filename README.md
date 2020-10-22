@@ -15,9 +15,10 @@ and pushing your changes back to GitHub, or by using the following link:
 Please update the following list of group members, including the NetIDs
 for each group member.
 
- * Huan Qi (hq38)
+ * Huan(Joy) Qi (hq38)
  * Raquel Taborga (rmt229)
- * Student Name (NetID)
+ * Sam DiPietro (sdd58)
+ * Ziyi Zhang (zz664)
 
 ### Member Roles
 
@@ -36,7 +37,7 @@ role, and which student was the architect.
  Lab   | NetID #1     | NetID #2     | NetID #3
  ------|--------------|--------------|--------------
  Lab 1 | RTL          | Verification | RTL (architect)
- Lab 2 |              |              |
+ Lab 2 | Joy          | Sam & Raquel | Ziyi
  Lab 3 |              |              |
  Lab 4 |              |              |
  Lab 5 |              |              |
