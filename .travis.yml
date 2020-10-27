@@ -51,3 +51,5 @@ before_script:
 
 script:
  - py.test --verbose ../lab2_proc
+ - python ../lab2_proc/proc_sim_staff_test_delays.py
+ - python ../lab2_proc/proc_sim_staff_eval.py
