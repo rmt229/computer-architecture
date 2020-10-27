@@ -77,8 +77,8 @@ module lab2_proc_AluVRTL
                                                                        //           but Assign RHS's LT generates 1 bits
       4'd7    : out = { 31'd0, ops_ltu};                     // SLTU TODO: check correctness
       4'd8    : out = $signed(in0) >>> in1[4:0];                       // SRA
-      4'd9    : out = in0 >> in1;                                      // SRL
-      4'd10   : out = in0 << in1;                                      // SLL
+      4'd9    : out = in0 >> in1[4:0];                                 // SRL
+      4'd10   : out = in0 << in1[4:0];                                 // SLL
       4'd11   : out = in0;                                             // CP OP0
       4'd12   : out = in1;                                             // CP OP1
       4'd13   : out = (in0 + in1) & 32'hfffffffe;                      // jalr
