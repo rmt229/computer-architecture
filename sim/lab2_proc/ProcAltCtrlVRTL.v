@@ -308,7 +308,7 @@ module lab2_proc_ProcAltCtrlVRTL
   localparam alu_x    = 4'bx;
   localparam alu_add  = 4'd0;
   localparam alu_sub  = 4'd1;
-  localparam alu_mul  = 4'd2;
+  // localparam alu_mul  = 4'd2;
   localparam alu_and  = 4'd3;
   localparam alu_or   = 4'd4;
   localparam alu_xor  = 4'd5;
@@ -414,7 +414,7 @@ module lab2_proc_ProcAltCtrlVRTL
       `RV2ISA_INST_NOP     :cs( y, j_n, br_na,  imm_x, am_rf, n,  bm_x,   n, alu_x,   em_x, nr, wm_r, n,  n,   n    );
       `RV2ISA_INST_ADD     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_add, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_SUB     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_sub, em_a, nr, wm_r, y,  n,   n    );
-      `RV2ISA_INST_MUL     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_mul, em_a, nr, wm_r, y,  n,   n    );
+      `RV2ISA_INST_MUL     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_x,   em_m, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_AND     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_and, em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_OR      :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_or,  em_a, nr, wm_r, y,  n,   n    );
       `RV2ISA_INST_XOR     :cs( y, j_n, br_na,  imm_x, am_rf, y,  bm_rf,  y, alu_xor, em_a, nr, wm_r, y,  n,   n    );
@@ -552,7 +552,7 @@ module lab2_proc_ProcAltCtrlVRTL
 
   // Final ostall signal
 
-  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_load_use_X_rs1_D || ostall_load_use_X_rs2_D || (alu_fn_X == alu_mul && !imul_req_rdy_D) );
+  assign ostall_D = val_D && ( ostall_mngr2proc_D || ostall_load_use_X_rs1_D || ostall_load_use_X_rs2_D || (ex_result_sel_D == em_m && !imul_req_rdy_D) );
 
   //==================================================================================================================================================
   // BYPASSING
@@ -628,7 +628,7 @@ module lab2_proc_ProcAltCtrlVRTL
   
   // osquash due to jump instruction in D stage
 
-  assign osquash_D = pc_redirect_D; // when jal
+  assign osquash_D = val_D && !stall_D && pc_redirect_D; // when jal
 
   // stall and squash in D
 
@@ -637,7 +637,7 @@ module lab2_proc_ProcAltCtrlVRTL
 
   // Set imul_req_val only if not stalling
 
-  assign imul_req_val_D = val_D && !stall_D && (alu_fn_D == alu_mul);
+  assign imul_req_val_D = val_D && !stall_D && !squash_D && (ex_result_sel_D == em_m);
 
   // Valid signal for the next stage
 
@@ -718,7 +718,7 @@ module lab2_proc_ProcAltCtrlVRTL
 
   // ostall due to dmemreq not ready.
 
-  assign ostall_X = val_X && ((( dmemreq_type_X != nr ) && !dmemreq_rdy ) || (alu_fn_X == alu_mul && !imul_resp_val_X) );
+  assign ostall_X = val_X && ((( dmemreq_type_X != nr ) && !dmemreq_rdy ) || (ex_result_sel_X == em_m && !imul_resp_val_X) );
 
   // osquash due to taken branch, notice we can't osquash if current
   // stage stalls, otherwise we will send osquash twice.
@@ -735,7 +735,7 @@ module lab2_proc_ProcAltCtrlVRTL
 
   // set imul_resp_rdy only if not stalling
 
-  assign imul_resp_rdy_X = val_X && !stall_X;
+  assign imul_resp_rdy_X = val_X && !stall_X && ex_result_sel_X == em_m;
 
   // Valid signal for the next stage
 

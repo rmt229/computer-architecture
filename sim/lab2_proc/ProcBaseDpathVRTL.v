@@ -326,6 +326,8 @@ module lab2_proc_ProcBaseDpathVRTL
 
   logic [63:0] imul_req_msg; 
   logic [31:0] imul_resp_msg;
+
+  assign imul_req_msg = {op1_D, op2_D};
   
   lab1_imul_IntMulAltVRTL mul
   (
