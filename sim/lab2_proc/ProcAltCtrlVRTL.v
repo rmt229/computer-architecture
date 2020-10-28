@@ -628,7 +628,7 @@ module lab2_proc_ProcAltCtrlVRTL
   
   // osquash due to jump instruction in D stage
 
-  assign osquash_D = pc_redirect_D; // when jal
+  assign osquash_D = val_D && !stall_D && pc_redirect_D; // when jal
 
   // stall and squash in D
 
